@@ -10,8 +10,6 @@ body{
     font-size: 30px;
 }
 
-
-
 .nav-item{
     margin-left: 20px;
 }
@@ -28,6 +26,10 @@ body{
     border: black;
     border-width: medium;
     margin-right: 5px;
+}
+
+.card{
+    margin-top: 30px;
 }
 
 
