@@ -23,23 +23,21 @@
 
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto">
-                    <a class="navbar-brand" href="#">
-                            <img src="" width="30" height="30" class="d-inline-block align-top" alt="">
-                            Me-n-u
-                    </a>
+                <a class="navbar-brand" href="#">
+                        <img src="" width="30" height="30" class="d-inline-block align-top" alt="">
+                        Me-n-u
+                </a>    
                 
-                <li class="nav-item dropdown active">
-                    <button class="btn btn-outline-success dropdown-toggle" type="button" data-toggle="dropdown" id="#navbarDropdown">
-                        Refine Search
-                    </button>
-                    <div class="dropdown-menu">
-                    <button class="dropdown-cuisineType active">Cuisine Type</button>
-                    <button class="dropdown-time active">Prep Time</button>
-                    <button class="dropdown-diet active">Diet</a>
-                    <button class="dropdown-calories active">Calories</button>
-                    <button class="dropdown-health active">Restrictions</button>>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown">
+                    Refine Search
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Cuisine Type</a>
+                    <a class="dropdown-item" href="#">Diet</a>
+                    <a class="dropdown-item" href="#">Calories</a> 
                 </div>
-                </li>
+            </li>
             </ul>    
         </div>
     </nav>
@@ -49,12 +47,30 @@
             <input class="col-lg-9" type="text" placeholder="Search By Ingredient" id="searchBox">
             <button class="col-lg-2 btn-outline-success" type="submit">Search</button>
         </form>
+
+        <!--Div class for searched recipes to display-->  
+        <div class="recipeResults">
+            <!--Sample Card-->
+            <div class="card" style="width: 20%; height: 50%">
+                    <img src="http://lorempixel.com/output/food-q-c-200-200-2.jpg" class="card-img-top" alt="chicken" >
+                    <div class="card-body">
+                    <h5 class="card-title">Prep Time</h5>  
+                    <p>30 minutes</p>  
+                    <h5 class="card-title">Number of Ingredients</h5>
+                    <p>12</p>
+                    <a href="#" class="btn btn-success">Get Recipe</a>
+                    </div>
+            </div>
+        </div>    
     </div>
            
-    
-
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    
+    <!--Bootstrap JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <!--Firebase-->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
     <!-- Javascript -->
