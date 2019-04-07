@@ -40,18 +40,24 @@
         <div class="form-inline" id="navbarOptions">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown">
-                        Refine Search
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Cuisine Type</a>
-                        <a class="dropdown-item" href="#">Diet</a>
-                        <a class="dropdown-item" href="#">Calories</a> 
-                    </div>
+                   <form>
+                       <div class="searchChoices">
+                           <select class="custom-select" id="refineSearch">
+                               <option selected>Refine Search...</option>
+                               <option value="1">Balanced</option>
+                               <option value="2">High Protein</option>
+                               <option value="3">Low-fat</option>
+                               <option value="4">Low-carb</option>
+                               <option value="5">Vegan</option>
+                               <option value="6">Vegetarian</option>
+                               <option value="7">Sugar-conscious</option>
+                               <option value="8">Peanut-free</option>
+                               <option value="9">Tree-nut-free</option>
+                               <option value="10">Alcohol-free</option>
+                           </select>
+                       </div>
+                   </form>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="">My Recipes<span id="myRecipes"></span></a>
-                </li> 
                 <li class="nav-item">
                     <a class="nav-link" href=""><span id="shoppingList"></span>My Cart</a>
                 </li>

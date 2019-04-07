@@ -2,10 +2,12 @@ body{
     background: url(https://img.freepik.com/free-photo/basil-leaves-chia-seeds-halved-tomato-oil-arranged-white-wooden-floor_23-2148026880.jpg?size=626&ext=jpg) no-repeat center fixed; 
     background-size: cover;
 }
-.navbar{
-    color:black;
 
+.searchChoices{
+    border: green;
+    margin-right: 20px;
 }
+
 .container{
     margin-top: 50px;
 
