@@ -31,7 +31,6 @@ $.ajax({
   console.log(response)
 })
 
-
 // USER AUTH
 
 // Hide and show html elements based on whether user is logged in or out
