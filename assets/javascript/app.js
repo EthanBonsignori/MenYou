@@ -1,11 +1,11 @@
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyD_RbNxA_Rad5T0IXj52n_-MZ8a8vvLQkI",
-  authDomain: "recipesz.firebaseapp.com",
-  databaseURL: "https://recipesz.firebaseio.com",
-  projectId: "recipesz",
-  storageBucket: "recipesz.appspot.com",
-  messagingSenderId: "389525472979"
+  apiKey: 'AIzaSyD_RbNxA_Rad5T0IXj52n_-MZ8a8vvLQkI',
+  authDomain: 'recipesz.firebaseapp.com',
+  databaseURL: 'https://recipesz.firebaseio.com',
+  projectId: 'recipesz',
+  storageBucket: 'recipesz.appspot.com',
+  messagingSenderId: '389525472979'
 };
 firebase.initializeApp(config)
 let db = firebase.firestore()
@@ -48,14 +48,14 @@ auth.onAuthStateChanged(user => {
     userDisplayName = user.displayName
     // // Grab train info on any change in the database
     // db.collection('').onSnapshot(snapshot => {
-      // 
-      // DO STUFF IF USER LOGGED IN 
-      //
+    //
+    // DO STUFF IF USER LOGGED IN
+    //
     // }, error => console.log(error.message))
   } else {
     console.log('User logged out')
-    // 
-    // DO STUFF IF USER LOGGED OUT 
+    //
+    // DO STUFF IF USER LOGGED OUT
     //
   }
 })
