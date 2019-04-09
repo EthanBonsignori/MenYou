@@ -11,28 +11,76 @@ firebase.initializeApp(config)
 let db = firebase.firestore()
 let auth = firebase.auth()
 
-let search
-$('#searchForm').on('submit', function (event) {
-  event.preventDefault()
-  search = $('#searchBox').val()
-  console.log(search)
+let recipeDisplay = $('.recipeResults')
+// Search and Append Recipes
+$('#searchForm').submit((e) => {
+  e.preventDefault()
+  // Empty the current results
+  recipeDisplay.empty()
+  // Get user input
+  let searchTerm = $('#searchBox').val()
+  // ***TEMPORARY***
+  // Set up query URL for giphy api
+  // ***TEMPORARY***
+  let api = `4IYY54HZyXsYnTziL6RL5YrOlTPBe8Ab&q`
+  let limit = 10
+  let queryUrlgifs = `https://api.giphy.com/v1/gifs/search?api_key=${api}&q=${searchTerm}&limit=10`
+  // Get gifs from giphy api
+  $.ajax({
+    url: queryUrlgifs,
+    method: 'GET'
+  }).then(function (response) {
+    console.log(response)
+    for (let i = 0; i <= limit; i++) {
+      // ***TEMPORARY***
+      let path = response.data[i]
+      let still = path.images.fixed_height_still.url
+      let type = path.type
+      let title = path.title
+      let rating = path.rating
+      // Buiild each recipe
+      let newRecipe = $(`
+        <div class="card recipe" style="width: 22rem;">
+          <img src="${still}" class="card-img-top" alt="${title}">
+          <div class="card-body">
+            <h5 class="card-title lead">${title}</h5>
+            <h5 class="card-title">Ingredients</h5>  
+            <p class="card-text">${rating}</p>  
+            <h5 class="card-title">Prep Time</h5>
+            <p class="card-text">${type}</p>
+            <a href="#" class="btn btn-success">Get Recipe</a>
+          </div>
+        </div>
+      `)
+      recipeDisplay.append(newRecipe)
+      console.log(newRecipe)
+    }
+  })
 })
 
-let apiID = `f1800d3c`
-let apiKey = `ced3fcea9ee7146855cce55b5408809e`
+// let search
+// $('#searchForm').on('submit', function (event) {
+//   event.preventDefault()
+//   search = $('#searchBox').val()
+//   console.log(search)
+// })
+
+// let apiID = `f1800d3c`
+// let apiKey = `ced3fcea9ee7146855cce55b5408809e`
 
 // UNCOMMENT THIS URL TO SEARCH
 // let queryUrl = `https://api.edamam.com/search?q=${search}&app_id=${apiID}&app_key=${apiKey}`
 
-$.ajax({
-  url: queryUrl,
-  method: 'GET'
-}).then(function (response) {
-  console.log(response)
-})
+// $.ajax({
+//   url: queryUrl,
+//   method: 'GET'
+// }).then(function (response) {
+//   console.log(response)
+// })
 
+//
 // USER AUTH
-
+//
 // Hide and show html elements based on whether user is logged in or out
 const userLoggedOut = document.querySelectorAll('.logged-out')
 const userLoggedIn = document.querySelectorAll('.logged-in')
@@ -103,7 +151,7 @@ $('#signup-password, #signup-password-confirm').on('keyup', function () {
   let pw2 = $('#signup-password-confirm')
   let pwResponse = $('#password-response')
   if (pw1.val() === pw2.val()) {
-    pwResponse.html('Password match').css('color', 'green')
+    pwResponse.html('Passwords match').css('color', 'green')
     $('#match').css('display', 'block')
     $('#no-match').css('display', 'none')
   } else {
@@ -131,4 +179,3 @@ loginForm.on('submit', (e) => {
       $('#password-login-response').html(error.message).css('color', 'red')
     })
 })
-
