@@ -2,10 +2,28 @@ body{
     background: url(https://img.freepik.com/free-photo/basil-leaves-chia-seeds-halved-tomato-oil-arranged-white-wooden-floor_23-2148026880.jpg?size=626&ext=jpg) no-repeat center fixed; 
     background-size: cover;
 }
-.navbar{
-    color:black;
 
+#recipeTitle{
+    width: 74%;
 }
+
+.nav-item{
+    margin: 10px;
+}
+
+#ingredientList{
+    width: 100%;
+}
+
+#recipeDirections{
+    width: 100%;
+}
+
+.searchChoices{
+    border: green;
+    margin-right: 20px;
+}
+
 .container{
     margin-top: 50px;
 
@@ -14,6 +32,7 @@ body{
 .form-search{
     height: 70px;
     font-size: 2rem;
+    margin-bottom: 20px;
 }
 .col-lg-9{
     border: black;
@@ -21,11 +40,60 @@ body{
     margin-right: 5px;
 }
 
-#whisk-add-products{
+#addRecipeButton{
     margin-top: 30px;
-    border: 2px solid green;
-    height: 50px;
+}
+
+/* Account */
+.logged-in, .logged-out {
+display: none;
+} 
+#login-button, #signup-button {
+position: relative;
+bottom: 0;
+left:0;
+width: 107%;
+padding: 1rem;
+margin: 2rem 0 -1rem -1rem ;
+
+border-top-right-radius: 0;
+border-top-left-radius: 0;
+}
+.password-toggle {
+color: rgb(190, 190, 190);
+position: absolute;
+width: auto;
+bottom: 8px;
+right: 10px;
+margin-top: 0;
+cursor: pointer;
+pointer-events: all; 
+}
+.password-toggle:hover {
+    color: rgb(170, 170, 170);
+}
+.password-toggle:active {
+    color: rgb(150, 150, 150);
+}
+
+#password-match {
+position: absolute;
+width: auto;
+bottom: 10px;
+right: 10px;
+margin-top: 0;
+}
+#password-match #no-match {
+    color: red;
+    display: none;
+}
+#password-match #match {
     color: green;
+    display: none;
+}
+
+#password-login-response, #password-response {
+display: inline
 }
 
 
