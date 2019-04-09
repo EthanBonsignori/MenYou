@@ -189,3 +189,32 @@ loginForm.on('submit', (e) => {
       $('#password-login-response').html(error.message).css('color', 'red')
     })
 })
+
+// Hide and show html elements based on whether user is logged in or out
+const userLoggedOut = document.querySelectorAll('.logged-out')
+const userLoggedIn = document.querySelectorAll('.logged-in')
+const setupUI = (user) => {
+  // if logged in
+  if (user) {
+    db.collection('users').doc(user.uid).get().then(doc => {
+      // Show account info
+      $('#display-name').attr('data-value', doc.data().displayName)
+      $('#user-display-name').text(doc.data().displayName)
+      $('#user-email').text(user.email)
+      $('#user-account-created').text(user.metadata.creationTime)
+    })
+    // Show UI elements
+    userLoggedIn.forEach((item) => { item.style.display = 'block' })
+    userLoggedOut.forEach((item) => { item.style.display = 'none' })
+  // if logged out
+  } else {
+    // Hide account details
+    $('#display-name').attr('data-value', '')
+    $('#user-display-name').text('')
+    $('#user-email').text('')
+    $('#user-account-created').text('')
+    // Hide UI elements
+    userLoggedIn.forEach((item) => { item.style.display = 'none' })
+    userLoggedOut.forEach((item) => { item.style.display = 'block' })
+  }
+}
