@@ -11,28 +11,86 @@ firebase.initializeApp(config)
 let db = firebase.firestore()
 let auth = firebase.auth()
 
-let search
-$('#searchForm').on('submit', function (event) {
-  event.preventDefault()
-  search = $('#searchBox').val()
-  console.log(search)
+let recipeDisplay = $('.recipeResults')
+// Search and Append Recipes
+$('#searchForm').submit((e) => {
+  e.preventDefault()
+  // Empty the current results
+  recipeDisplay.empty()
+  // Get user input
+  let searchTerm = $('#searchBox').val()
+  // ***TEMPORARY***
+  // Set up query URL for TheMealDB api
+  // ***TEMPORARY***
+  // let api = `4IYY54HZyXsYnTziL6RL5YrOlTPBe8Ab&q`
+  let limit = 10
+  let queryUrlgifs = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchTerm}`
+  // Get recipes from API
+  $.ajax({
+    url: queryUrlgifs,
+    method: 'GET'
+  }).then(function (response) {
+    console.log(response.meals)
+    let recipesPerRow = 3
+    let columns = 3
+    let rows = 0
+    let columnWidth = 12 / columns
+    let recipeHtml = `<div class="row">`
+      for (let i = 0; i < limit; i++) {
+        // ***TEMPORARY***
+        let path = response.meals[i]
+        let still = path.strMealThumb
+        // let type = path.type
+        let title = path.strMeal
+        let rating = path.idMeal
+        // Build each recipe
+        recipeHtml +=
+         `<div class="col-md-${columnWidth}">
+            <div class="card recipe">
+              <img src="${still}" class="card-img" alt="${title}">
+              <div class="card-body">
+                <h5 class="card-title lead">${title}</h5>
+                <h5 class="card-title">Ingredients</h5>  
+                <p class="card-text">${rating}</p>  
+                <h5 class="card-title">Prep Time</h5>
+                <p class="card-text">30 Minutes</p>
+                <a href="#" class="btn btn-success">Get Recipe</a>
+              </div>
+            </div>
+          </div>`
+      }
+      rows++
+      if(rows % columns === 0) {
+        recipeHtml += `</div><div class="row">`
+      }
+    recipeDisplay.html(recipeHtml)
+  })
 })
 
-let apiID = `f1800d3c`
-let apiKey = `ced3fcea9ee7146855cce55b5408809e`
+// EDAMAM API
+// let search
+// $('#searchForm').on('submit', function (event) {
+//   event.preventDefault()
+//   search = $('#searchBox').val()
+//   console.log(search)
+// })
+
+// let apiID = `f1800d3c`
+// let apiKey = `ced3fcea9ee7146855cce55b5408809e`
 
 // UNCOMMENT THIS URL TO SEARCH
 // let queryUrl = `https://api.edamam.com/search?q=${search}&app_id=${apiID}&app_key=${apiKey}`
 
-$.ajax({
-  url: queryUrl,
-  method: 'GET'
-}).then(function (response) {
-  console.log(response)
-})
+// $.ajax({
+//   url: queryUrl,
+//   method: 'GET'
+// }).then(function (response) {
+//   console.log(response)
+// })
 
+//
 // USER AUTH
-
+//
 // Hide and show html elements based on whether user is logged in or out
 const userLoggedOut = document.querySelectorAll('.logged-out')
 const userLoggedIn = document.querySelectorAll('.logged-in')
@@ -103,7 +161,7 @@ $('#signup-password, #signup-password-confirm').on('keyup', function () {
   let pw2 = $('#signup-password-confirm')
   let pwResponse = $('#password-response')
   if (pw1.val() === pw2.val()) {
-    pwResponse.html('Password match').css('color', 'green')
+    pwResponse.html('Passwords match').css('color', 'green')
     $('#match').css('display', 'block')
     $('#no-match').css('display', 'none')
   } else {
@@ -132,3 +190,31 @@ loginForm.on('submit', (e) => {
     })
 })
 
+// Hide and show html elements based on whether user is logged in or out
+const userLoggedOut = document.querySelectorAll('.logged-out')
+const userLoggedIn = document.querySelectorAll('.logged-in')
+const setupUI = (user) => {
+  // if logged in
+  if (user) {
+    db.collection('users').doc(user.uid).get().then(doc => {
+      // Show account info
+      $('#display-name').attr('data-value', doc.data().displayName)
+      $('#user-display-name').text(doc.data().displayName)
+      $('#user-email').text(user.email)
+      $('#user-account-created').text(user.metadata.creationTime)
+    })
+    // Show UI elements
+    userLoggedIn.forEach((item) => { item.style.display = 'block' })
+    userLoggedOut.forEach((item) => { item.style.display = 'none' })
+  // if logged out
+  } else {
+    // Hide account details
+    $('#display-name').attr('data-value', '')
+    $('#user-display-name').text('')
+    $('#user-email').text('')
+    $('#user-account-created').text('')
+    // Hide UI elements
+    userLoggedIn.forEach((item) => { item.style.display = 'none' })
+    userLoggedOut.forEach((item) => { item.style.display = 'block' })
+  }
+}
