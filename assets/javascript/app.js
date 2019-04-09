@@ -20,44 +20,54 @@ $('#searchForm').submit((e) => {
   // Get user input
   let searchTerm = $('#searchBox').val()
   // ***TEMPORARY***
-  // Set up query URL for giphy api
+  // Set up query URL for TheMealDB api
   // ***TEMPORARY***
-  let api = `4IYY54HZyXsYnTziL6RL5YrOlTPBe8Ab&q`
+  // let api = `4IYY54HZyXsYnTziL6RL5YrOlTPBe8Ab&q`
   let limit = 10
-  let queryUrlgifs = `https://api.giphy.com/v1/gifs/search?api_key=${api}&q=${searchTerm}&limit=10`
-  // Get gifs from giphy api
+  let queryUrlgifs = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchTerm}`
+  // Get recipes from API
   $.ajax({
     url: queryUrlgifs,
     method: 'GET'
   }).then(function (response) {
-    console.log(response)
-    for (let i = 0; i <= limit; i++) {
-      // ***TEMPORARY***
-      let path = response.data[i]
-      let still = path.images.fixed_height_still.url
-      let type = path.type
-      let title = path.title
-      let rating = path.rating
-      // Buiild each recipe
-      let newRecipe = $(`
-        <div class="card recipe" style="width: 22rem;">
-          <img src="${still}" class="card-img-top" alt="${title}">
-          <div class="card-body">
-            <h5 class="card-title lead">${title}</h5>
-            <h5 class="card-title">Ingredients</h5>  
-            <p class="card-text">${rating}</p>  
-            <h5 class="card-title">Prep Time</h5>
-            <p class="card-text">${type}</p>
-            <a href="#" class="btn btn-success">Get Recipe</a>
-          </div>
-        </div>
-      `)
-      recipeDisplay.append(newRecipe)
-      console.log(newRecipe)
-    }
+    console.log(response.meals)
+    let recipesPerRow = 3
+    let columns = 3
+    let rows = 0
+    let columnWidth = 12 / columns
+    let recipeHtml = `<div class="row">`
+      for (let i = 0; i < limit; i++) {
+        // ***TEMPORARY***
+        let path = response.meals[i]
+        let still = path.strMealThumb
+        // let type = path.type
+        let title = path.strMeal
+        let rating = path.idMeal
+        // Build each recipe
+        recipeHtml +=
+         `<div class="col-md-${columnWidth}">
+            <div class="card recipe">
+              <img src="${still}" class="card-img" alt="${title}">
+              <div class="card-body">
+                <h5 class="card-title lead">${title}</h5>
+                <h5 class="card-title">Ingredients</h5>  
+                <p class="card-text">${rating}</p>  
+                <h5 class="card-title">Prep Time</h5>
+                <p class="card-text">30 Minutes</p>
+                <a href="#" class="btn btn-success">Get Recipe</a>
+              </div>
+            </div>
+          </div>`
+      }
+      rows++
+      if(rows % columns === 0) {
+        recipeHtml += `</div><div class="row">`
+      }
+    recipeDisplay.html(recipeHtml)
   })
 })
 
+// EDAMAM API
 // let search
 // $('#searchForm').on('submit', function (event) {
 //   event.preventDefault()
