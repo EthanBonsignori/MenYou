@@ -63,8 +63,10 @@
                       </li>
                       <li class="nav-item logged-in">
                           <button class="btn btn-danger" id="logout" style="color: white">Logout</button>
-                     </li> 
-                    </div>
+                     </li>
+                     <li class="nav-item active">
+                        <a class="nav-link" href="https://cdn.whisk.com/sdk/shopping-list.js">Shopping Cart</a>   
+                     </li>  
                 </ul>    
             </div>
         </nav>
@@ -101,7 +103,11 @@
                         <b>Recipe Title</b>
                         <input type="text" id="recipeTitle"> 
                         <form>
-                            <label for="ingredients" class="col-form-label"><b>Ingredients</b></label>
+                            <label for="ingredients" class="col-form-label"><b>Ingredients</b>
+                                <button>
+                                    <i class="fas fa-plus-circle" id="new-ingredient-field"></i>
+                                </button>
+                            </label>
                             <textarea class="form-control" id="ingredientsList"></textarea>
                             <label for="directions" class="col-form-label"><b>Directions</b></label>
                             <textarea class="form-control" id="recipeDirections"></textarea>
@@ -109,7 +115,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sucess">Submit</button>  
+                        <button type="button" class="btn btn-success" value="Submit Button" id="submitRecipe">Submit</button>  
                     </div>
                 </div>
             </div>
