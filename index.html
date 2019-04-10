@@ -22,36 +22,6 @@
     </head>
 
     <body>
-        <!--Modal that opens to add Family recipe-->
-        <!--Keep at top due to fixed position default in Bootstrap-->
-        <div class="modal" tabindex="-1" role="dialog" id=addFamilyRecipe>
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Recipe Title</h5>
-                        <input type="text" id="recipeTitle">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="ingredients">
-                        <h5>Ingredients</h5>
-                        <input id="ingredientList" type="text">
-                        <h5>Directions</h5>
-                        <input id="recipeDirections" type="text">
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-sucess" id="submitRecipe" type="submit"></button>  
-                    </div>
-                </div>
-            </div>
-        </div><!--End of add Family Recipe modal-->
-
-        
 
         <!--Bootstrap Navbar-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -81,18 +51,15 @@
                         </div>
                     </form>
                     </li>
-                    <div class="logged-out">
-                        <li class="nav-item">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#modal-signup" style="color: white">Signup</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#modal-login" style="color: white">Login</button>
-                        </li>
-                    </div>
-                    <div class="logged-in">
-                        <li class="nav-item">
-                            <button class="btn btn-danger" id="logout" style="color: white">Logout</button>
-                        </li> 
+                      <li class="nav-item logged-out">
+                          <button class="btn btn-success" data-toggle="modal" data-target="#modal-signup" style="color: white">Signup</button>
+                      </li>
+                      <li class="nav-item logged-out">
+                          <button class="btn btn-success" data-toggle="modal" data-target="#modal-login" style="color: white">Login</button>
+                      </li>
+                      <li class="nav-item logged-in">
+                          <button class="btn btn-danger" id="logout" style="color: white">Logout</button>
+                     </li> 
                     </div>
                 </ul>    
             </div>
@@ -115,6 +82,34 @@
             </div>
 
         </div>
+
+        <!--Modal that opens to add Family recipe-->
+        <div class="modal fade" tabindex="-1" role="dialog" id=addFamilyRecipe>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Recipe Title</h5>
+                        <input type="text" id="recipeTitle">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="ingredients">
+                        <h5>Ingredients</h5>
+                        <input id="ingredientList" type="text">
+                        <h5>Directions</h5>
+                        <input id="recipeDirections" type="text">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-sucess" id="submitRecipe" type="submit"></button>  
+                    </div>
+                </div>
+            </div>
+        </div><!--End of add Family Recipe modal-->
 
         <!-- Signup Modal -->
         <div class="modal fade" id="modal-signup" tabindex="10" role="dialog" aria-labelledby="signup-modal" aria-hidden="true">
@@ -190,7 +185,7 @@
             </div>
             </div>
         </div>
-          </div> <!-- End Login Modal -->
+      </div> <!-- End Login Modal -->
             
            
         <!-- jQuery -->
