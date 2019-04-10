@@ -17,7 +17,18 @@
     <!--Google Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Skranji:700" rel="stylesheet">
     
-   
+   <!--Whisk SDK script-->
+    <script
+    async="true"
+    src="https://cdn.whisk.com/sdk/shopping-list.js"
+    type="text/javascript">
+    </script>
+    
+    <script> 
+    var whisk = whisk || {};
+    whisk.queue = whisk.queue || [];
+    </script>
+    
     <title>Project 1</title>
     </head>
 
@@ -32,24 +43,17 @@
             
             <div class="form-inline" id="navbarOptions">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                    <form>
-                        <div class="searchChoices">
-                            <select class="custom-select" id="refineSearch">
-                                <option selected>Refine Search...</option>
-                                <option value="1">Balanced</option>
-                                <option value="2">High Protein</option>
-                                <option value="3">Low-fat</option>
-                                <option value="4">Low-carb</option>
-                                <option value="5">Vegan</option>
-                                <option value="6">Vegetarian</option>
-                                <option value="7">Sugar-conscious</option>
-                                <option value="8">Peanut-free</option>
-                                <option value="9">Tree-nut-free</option>
-                                <option value="10">Alcohol-free</option>
-                            </select>
-                        </div>
-                    </form>
+                    <li class="nav-item logged-in">
+                            <button class="btn btn-success" id="addRecipeButton" data-toggle="modal" data-target="#addFamilyRecipe">
+                            Add Family Recipes</button>
+                    <!-- <form> -->
+                        <!-- <div class="searchChoices"> -->
+                            <!-- <select class="custom-select" id="refineSearch"> -->
+                                <!-- <option selected>Refine Search...</option> -->
+                                <!-- <option value="1">Balanced</option> -->
+                            <!-- </select> -->
+                        <!-- </div> -->
+                    <!-- </form> -->
                     </li>
                       <li class="nav-item logged-out">
                           <button class="btn btn-success" data-toggle="modal" data-target="#modal-signup" style="color: white">Signup</button>
@@ -72,14 +76,13 @@
             </form>
 
             <!--Div class for searched recipes to display-->  
-            <div class="recipeResults"></div>
-            
-            <!--Div for adding recipe--> 
-            <div class="addRecipe">
-                <button class="btn btn-success" id="addRecipeButton" data-toggle="modal" data-target="#addFamilyRecipe">
-                    Add Family Recipes
-                </button>
+            <div class="recipeResults">
+
             </div>
+            
+           
+                
+           
 
         </div>
 
@@ -88,24 +91,25 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Recipe Title</h5>
-                        <input type="text" id="recipeTitle">
+                        <h5 class="modal-title">New Family Recipe</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <div class="ingredients">
-                        <h5>Ingredients</h5>
-                        <input id="ingredientList" type="text">
-                        <h5>Directions</h5>
-                        <input id="recipeDirections" type="text">
-                        </div>
+                        <b>Recipe Title</b>
+                        <input type="text" id="recipeTitle"> 
+                        <form>
+                            <label for="ingredients" class="col-form-label"><b>Ingredients</b></label>
+                            <textarea class="form-control" id="ingredientsList"></textarea>
+                            <label for="directions" class="col-form-label"><b>Directions</b></label>
+                            <textarea class="form-control" id="recipeDirections"></textarea>
+                        </form>
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-sucess" id="submitRecipe" type="submit"></button>  
+                        <button type="button" class="btn btn-sucess">Submit</button>  
                     </div>
                 </div>
             </div>
