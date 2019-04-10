@@ -6,7 +6,7 @@ var config = {
   projectId: 'recipesz',
   storageBucket: 'recipesz.appspot.com',
   messagingSenderId: '389525472979'
-};
+}
 firebase.initializeApp(config)
 let db = firebase.firestore()
 let auth = firebase.auth()
@@ -22,71 +22,56 @@ $('#searchForm').submit((e) => {
   // ***TEMPORARY***
   // Set up query URL for TheMealDB api
   // ***TEMPORARY***
-  // let api = `4IYY54HZyXsYnTziL6RL5YrOlTPBe8Ab&q`
+  // let apiKey = `f0c15aaf79ab41f458c504c472b9011c`
   let limit = 10
-  let queryUrlgifs = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchTerm}`
+  // Food2Fork
+  // let queryUrl = `https://www.food2fork.com/api/search?key=${apiKey}&q=${searchTerm}`
+  // Edamamam
+  let apiKey = `ced3fcea9ee7146855cce55b5408809e`
+  let apiID = `f1800d3c`
+  let queryUrl = `https://api.edamam.com/search?q=${searchTerm}&app_id=${apiID}&app_key=${apiKey}`
+  // TheRecipeDB
+  // let queryUrl = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchTerm}`
   // Get recipes from API
   $.ajax({
-    url: queryUrlgifs,
+    url: queryUrl,
     method: 'GET'
   }).then(function (response) {
-    console.log(response.meals)
-    let recipesPerRow = 3
+    console.log(response)
     let columns = 3
     let rows = 0
     let columnWidth = 12 / columns
     let recipeHtml = `<div class="row">`
-      for (let i = 0; i < limit; i++) {
-        // ***TEMPORARY***
-        let path = response.meals[i]
-        let still = path.strMealThumb
-        // let type = path.type
-        let title = path.strMeal
-        let rating = path.idMeal
-        // Build each recipe
-        recipeHtml +=
-         `<div class="col-md-${columnWidth} mt-3">
-            <div class="card recipe">
-              <img src="${still}" class="card-img" alt="${title}">
-              <div class="card-body">
-                <h5 class="card-title lead">${title}</h5>
-                <h5 class="card-title">Ingredients</h5>  
-                <p class="card-text">${rating}</p>  
-                <h5 class="card-title">Prep Time</h5>
-                <p class="card-text">30 Minutes</p>
-                <a href="#" class="btn btn-success">Get Recipe</a>
-              </div>
+    for (let i = 0; i < limit; i++) {
+      // ***TEMPORARY***
+      let path = response.hits[i]
+      let still = path.strMealThumb
+      // let type = path.type
+      let title = path.strMeal
+      let rating = path.idMeal
+      // Build each recipe
+      recipeHtml +=
+        `<div class="col-md-${columnWidth} mt-3">
+          <div class="card recipe">
+            <img src="${still}" class="card-img" alt="${title}">
+            <div class="card-body">
+              <h5 class="card-title lead">${title}</h5>
+              <h5 class="card-title">Ingredients</h5>  
+              <p class="card-text">${rating}</p>  
+              <h5 class="card-title">Prep Time</h5>
+              <p class="card-text">30 Minutes</p>
+              <a href="#" class="btn btn-success">Get Recipe</a>
             </div>
-          </div>`
-      }
-      rows++
-      if(rows % columns === 0) {
-        recipeHtml += `</div><div class="row">`
-      }
+          </div>
+        </div>`
+    }
+    rows++
+    if (rows % columns === 0) {
+      recipeHtml += `</div><div class="row">`
+    }
     recipeDisplay.html(recipeHtml)
   })
 })
-
-// EDAMAM API
-// let search
-// $('#searchForm').on('submit', function (event) {
-//   event.preventDefault()
-//   search = $('#searchBox').val()
-//   console.log(search)
-// })
-
-// let apiID = `f1800d3c`
-// let apiKey = `ced3fcea9ee7146855cce55b5408809e`
-
-// UNCOMMENT THIS URL TO SEARCH
-// let queryUrl = `https://api.edamam.com/search?q=${search}&app_id=${apiID}&app_key=${apiKey}`
-
-// $.ajax({
-//   url: queryUrl,
-//   method: 'GET'
-// }).then(function (response) {
-//   console.log(response)
-// })
 
 //
 // USER AUTH
