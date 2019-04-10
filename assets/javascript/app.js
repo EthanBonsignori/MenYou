@@ -45,7 +45,7 @@ $('#searchForm').submit((e) => {
         let rating = path.idMeal
         // Build each recipe
         recipeHtml +=
-         `<div class="col-md-${columnWidth}">
+         `<div class="col-md-${columnWidth} mt-3">
             <div class="card recipe">
               <img src="${still}" class="card-img" alt="${title}">
               <div class="card-body">
@@ -91,10 +91,6 @@ $('#searchForm').submit((e) => {
 //
 // USER AUTH
 //
-// Hide and show html elements based on whether user is logged in or out
-const userLoggedOut = document.querySelectorAll('.logged-out')
-const userLoggedIn = document.querySelectorAll('.logged-in')
-
 // Store displayName of logged in user globally
 let userDisplayName
 // Listen for auth status changes
@@ -103,17 +99,10 @@ auth.onAuthStateChanged(user => {
     console.log('User logged in', user)
     // Save the display name of the logged in user
     userDisplayName = user.displayName
-    // // Grab train info on any change in the database
-    // db.collection('').onSnapshot(snapshot => {
-    //
-    // DO STUFF IF USER LOGGED IN
-    //
-    // }, error => console.log(error.message))
+    setupUI(user)
   } else {
     console.log('User logged out')
-    //
-    // DO STUFF IF USER LOGGED OUT
-    //
+    setupUI()
   }
 })
 
@@ -126,21 +115,19 @@ signupForm.on('submit', (e) => {
   const displayName = $('#signup-displayname').val()
   const email = $('#signup-email').val()
   const password = $('#signup-password').val()
-  userDisplayName = displayName
 
   // Signup the user
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(function (cred) {
-      // Close the signup modal and clear the signup forms
-      $('#modal-signup').modal('toggle')
-      document.getElementById('signup-form').reset()
-      let user = auth.currentUser
-      user.updateProfile({
-        displayName: displayName
-      })
-    }).catch(function (error) {
-      $('#password-response').html(error.message).css('color', 'red')
+  auth.createUserWithEmailAndPassword(email, password).then((cred) => {
+    return db.collection('users').doc(cred.user.uid).set({
+      displayName: displayName
     })
+  }).then(() => {
+    // Close the signup modal and clear the signup forms
+    $('#modal-signup').modal('toggle')
+    document.getElementById('signup-form').reset()
+  }).catch(function (error) {
+    $('#password-response').html(error.message).css('color', 'red')
+  })
 })
 
 // Toggle password visibility with icon by switching it from type=password to type=text
@@ -188,6 +175,14 @@ loginForm.on('submit', (e) => {
     }).catch(function (error) {
       $('#password-login-response').html(error.message).css('color', 'red')
     })
+})
+
+// User logout
+const logout = $('#logout')
+logout.on('click', (e) => {
+  e.preventDefault()
+  // Sign the user out
+  auth.signOut()
 })
 
 // Hide and show html elements based on whether user is logged in or out
