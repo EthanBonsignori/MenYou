@@ -3,22 +3,17 @@ body{
     background-size: cover;
 }
 
-#recipeTitle{
-    width: 74%;
-}
-
 .nav-item{
     margin: 10px;
 }
 
-#ingredientList{
+#recipeTitle{
     width: 100%;
 }
 
-#recipeDirections{
-    width: 100%;
+#new-ingredient-field{
+    color: green;   
 }
-
 .searchChoices{
     border: green;
     margin-right: 20px;
@@ -38,10 +33,6 @@ body{
     border: black;
     border-width: medium;
     margin-right: 5px;
-}
-
-#addRecipeButton{
-    margin-top: 30px;
 }
 
 /* Account */
