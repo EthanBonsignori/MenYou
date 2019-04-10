@@ -31,17 +31,33 @@ $('#searchForm').submit((e) => {
   // if the search has already been cached
   if (completed.indexOf(searchTerm) > -1) {
     // get cached data from firebase
-    displayResultsFirebase(searchTerm)
+    getResultsFirebase(searchTerm)
   // If the search has not been cached
   } else {
     // get data from api (and then cache it)
-    displayResultsAPI(searchTerm)
+    getResultsAPI(searchTerm)
   }
 })
 
+let getResultsFirebase = (searchTerm) => {
+  blobsRef.doc(`${searchTerm}`).get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log('search cached... getting results from firebase')
+        let recipes = JSON.parse(doc.data().json)
+        console.log(recipes)
+        displayResults(recipes)
+      } else {
+        getResultsAPI(searchTerm)
+      }
+    }).catch((error) => {
+      console.log('Error getting document: ', error)
+    })
+}
+
 // Query the API with searchterm and display results on page
-let displayResultsAPI = (searchTerm) => {
-  let limit = 10
+let getResultsAPI = (searchTerm) => {
+  console.log('search not cached... getting results from api')
   // Edamam API
   let apiKey = `ced3fcea9ee7146855cce55b5408809e`
   let apiID = `f1800d3c`
@@ -52,57 +68,63 @@ let displayResultsAPI = (searchTerm) => {
     method: 'GET'
   }).then(function (response) {
     console.log(response)
-    let columns = 3
-    let rows = 0
-    let columnWidth = 12 / columns
-    let recipeHtml = `<div class="row">`
-    // if search returns results
-    if (response.hits.length > 0) {
-      recipeDisplay.empty()
-      for (let i = 0; i < limit; i++) {
-        let path = response.hits[i].recipe
-        let image = path.image
-        let title = path.label
-        let ingredients = path.ingredientLines.length
-        let time = path.totalTime
-        let url = path.url
-        // Build each recipe
-        recipeHtml +=
-          `<div class="col-md-${columnWidth} mt-3">
-            <div class="card recipe">
-              <img src="${image}" class="card-img" alt="${title}">
-              <div class="card-body">
-                <h5 class="card-title lead">${title}</h5>
-                <h5 class="card-title">Ingredients</h5>  
-                <p class="card-text">${ingredients}</p>  
-                <h5 class="card-title">Prep Time</h5>
-                <p class="card-text">${time} mins.</p>
-                <a href="${url}" target="_blank" class="btn btn-success">View Recipe</a>
-              </div>
-            </div>
-          </div>`
-      }
-      rows++
-      if (rows % columns === 0) {
-        recipeHtml += `</div><div class="row">`
-      }
-      // Add the search term to the completed searches array
-      completedRef.update({
-        searches: firebase.firestore.FieldValue.arrayUnion(`${searchTerm}`)
-      })
-      // Store the json response in a document named after the search
-      blobsRef.doc(`${searchTerm}`).set({
-        json: JSON.stringify(response)
-      })
-    } else {
+    displayResults(response)
+  })
+}
+
+let displayResults = (json) => {
+  let columns = 3
+  let rows = 0
+  let columnWidth = 12 / columns
+  let recipeHtml = `<div class="row">`
+  let length = json.hits.length
+  let search = json.q
+  // if search returns results
+  if (length > 0) {
+    recipeDisplay.empty()
+    for (let i = 0; i < length; i++) {
+      let path = json.hits[i].recipe
+      let image = path.image
+      let title = path.label
+      let ingredients = path.ingredientLines.length
+      let time = path.totalTime
+      let url = path.url
+      // Build each recipe
       recipeHtml +=
-        `<div class="text-center text-danger">
-            <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${searchTerm}<span></h3>
+        `<div class="col-md-${columnWidth} mt-3">
+          <div class="card recipe">
+            <img src="${image}" class="card-img" alt="${title}">
+            <div class="card-body">
+              <h5 class="card-title lead">${title}</h5>
+              <h5 class="card-title">Ingredients</h5>  
+              <p class="card-text">${ingredients}</p>  
+              <h5 class="card-title">Prep Time</h5>
+              <p class="card-text">${time} mins.</p>
+              <a href="${url}" target="_blank" class="btn btn-success">View Recipe</a>
+            </div>
           </div>
         </div>`
     }
-    recipeDisplay.html(recipeHtml)
-  })
+    rows++
+    if (rows % columns === 0) {
+      recipeHtml += `</div><div class="row">`
+    }
+    // Add the search term to the completed searches array
+    completedRef.update({
+      searches: firebase.firestore.FieldValue.arrayUnion(`${search}`)
+    })
+    // Store the json response in a document named after the search
+    blobsRef.doc(`${search}`).set({
+      json: JSON.stringify(json)
+    })
+  } else {
+    recipeHtml +=
+      `<div class="text-center text-danger">
+          <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${searchTerm}<span></h3>
+        </div>
+      </div>`
+  }
+  recipeDisplay.html(recipeHtml)
 }
 
 function showSpinner () {
@@ -127,7 +149,6 @@ auth.onAuthStateChanged(user => {
     setupUI(user)
     completedRef.onSnapshot(snap => {
       completed = snap.data().searches
-      console.log(completed)
     })
   } else {
     console.log('User logged out')
