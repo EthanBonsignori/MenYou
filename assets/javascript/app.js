@@ -6,93 +6,140 @@ var config = {
   projectId: 'recipesz',
   storageBucket: 'recipesz.appspot.com',
   messagingSenderId: '389525472979'
-};
+}
 firebase.initializeApp(config)
 let db = firebase.firestore()
 let auth = firebase.auth()
 
+// Store displayName of logged in user globally
+let userDisplayName
+// Reference to all the cached searches in firestore
+let completed = []
+let completedRef = db.collection('completed').doc('searches')
+let blobsRef = db.collection('blobs')
+
+// Html element where our recipes will be shown
 let recipeDisplay = $('.recipeResults')
-// Search and Append Recipes
+
+// On search form submit
 $('#searchForm').submit((e) => {
-  e.preventDefault()
-  // Empty the current results
-  recipeDisplay.empty()
+  e.preventDefault() // Prevent page from reloading
+  recipeDisplay.empty() // Empty the recipe display div
+  showSpinner() // Show a spinner while results load
   // Get user input
-  let searchTerm = $('#searchBox').val()
-  // ***TEMPORARY***
-  // Set up query URL for TheMealDB api
-  // ***TEMPORARY***
-  // let api = `4IYY54HZyXsYnTziL6RL5YrOlTPBe8Ab&q`
-  let limit = 10
-  let queryUrlgifs = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchTerm}`
-  // Get recipes from API
-  $.ajax({
-    url: queryUrlgifs,
-    method: 'GET'
-  }).then(function (response) {
-    console.log(response.meals)
-    let recipesPerRow = 3
-    let columns = 3
-    let rows = 0
-    let columnWidth = 12 / columns
-    let recipeHtml = `<div class="row">`
-      for (let i = 0; i < limit; i++) {
-        // ***TEMPORARY***
-        let path = response.meals[i]
-        let still = path.strMealThumb
-        // let type = path.type
-        let title = path.strMeal
-        let rating = path.idMeal
-        // Build each recipe
-        recipeHtml +=
-         `<div class="col-md-${columnWidth} mt-3">
-            <div class="card recipe">
-              <img src="${still}" class="card-img" alt="${title}">
-              <div class="card-body">
-                <h5 class="card-title lead">${title}</h5>
-                <h5 class="card-title">Ingredients</h5>  
-                <p class="card-text">${rating}</p>  
-                <h5 class="card-title">Prep Time</h5>
-                <p class="card-text">30 Minutes</p>
-                <a href="#" class="btn btn-success">Get Recipe</a>
-              </div>
-            </div>
-          </div>`
-      }
-      rows++
-      if(rows % columns === 0) {
-        recipeHtml += `</div><div class="row">`
-      }
-    recipeDisplay.html(recipeHtml)
-  })
+  let searchTerm = $('#searchBox').val().trim().toLowerCase()
+  // if the search has already been cached
+  if (completed.indexOf(searchTerm) > -1) {
+    // get cached data from firebase
+    getResultsFirebase(searchTerm)
+  // If the search has not been cached
+  } else {
+    // get data from api (and then cache it)
+    getResultsAPI(searchTerm)
+  }
 })
 
-// EDAMAM API
-// let search
-// $('#searchForm').on('submit', function (event) {
-//   event.preventDefault()
-//   search = $('#searchBox').val()
-//   console.log(search)
-// })
+let getResultsFirebase = (searchTerm) => {
+  blobsRef.doc(`${searchTerm}`).get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log('search cached... getting results from firebase')
+        let recipes = JSON.parse(doc.data().json)
+        console.log(recipes)
+        displayResults(recipes)
+      } else {
+        getResultsAPI(searchTerm)
+      }
+    }).catch((error) => {
+      console.log('Error getting document: ', error)
+    })
+}
 
-// let apiID = `f1800d3c`
-// let apiKey = `ced3fcea9ee7146855cce55b5408809e`
+// Query the API with searchterm and display results on page
+let getResultsAPI = (searchTerm) => {
+  console.log('search not cached... getting results from api')
+  // Edamam API
+  let apiKey = `ced3fcea9ee7146855cce55b5408809e`
+  let apiID = `f1800d3c`
+  let queryUrl = `https://api.edamam.com/search?q=${searchTerm}&app_id=${apiID}&app_key=${apiKey}`
+  // Get recipes from API
+  $.ajax({
+    url: queryUrl,
+    method: 'GET'
+  }).then(function (response) {
+    console.log(response)
+    displayResults(response)
+  })
+}
 
-// UNCOMMENT THIS URL TO SEARCH
-// let queryUrl = `https://api.edamam.com/search?q=${search}&app_id=${apiID}&app_key=${apiKey}`
+let displayResults = (json) => {
+  let columns = 3
+  let rows = 0
+  let columnWidth = 12 / columns
+  let recipeHtml = `<div class="row">`
+  let length = json.hits.length
+  let search = json.q
+  // if search returns results
+  if (length > 0) {
+    recipeDisplay.empty()
+    for (let i = 0; i < length; i++) {
+      let path = json.hits[i].recipe
+      let image = path.image
+      let title = path.label
+      let ingredients = path.ingredientLines.length
+      let time = path.totalTime
+      let url = path.url
+      // Build each recipe
+      recipeHtml +=
+        `<div class="col-md-${columnWidth} mt-3">
+          <div class="card recipe">
+            <img src="${image}" class="card-img" alt="${title}">
+            <div class="card-body">
+              <h5 class="card-title lead">${title}</h5>
+              <h5 class="card-title">Ingredients</h5>  
+              <p class="card-text">${ingredients}</p>  
+              <h5 class="card-title">Prep Time</h5>
+              <p class="card-text">${time} mins.</p>
+              <a href="${url}" target="_blank" class="btn btn-success">View Recipe</a>
+            </div>
+          </div>
+        </div>`
+    }
+    rows++
+    if (rows % columns === 0) {
+      recipeHtml += `</div><div class="row">`
+    }
+    // Add the search term to the completed searches array
+    completedRef.update({
+      searches: firebase.firestore.FieldValue.arrayUnion(`${search}`)
+    })
+    // Store the json response in a document named after the search
+    blobsRef.doc(`${search}`).set({
+      json: JSON.stringify(json)
+    })
+  } else {
+    recipeHtml +=
+      `<div class="text-center text-danger">
+          <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${searchTerm}<span></h3>
+        </div>
+      </div>`
+  }
+  recipeDisplay.html(recipeHtml)
+}
 
-// $.ajax({
-//   url: queryUrl,
-//   method: 'GET'
-// }).then(function (response) {
-//   console.log(response)
-// })
+function showSpinner () {
+  recipeDisplay.html(`
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-success mt-5" role="status" style="width: 5rem; height: 5rem;>
+        <span class="sr-only"></span>
+      </div>
+    </div>`
+  )
+}
 
 //
 // USER AUTH
 //
-// Store displayName of logged in user globally
-let userDisplayName
 // Listen for auth status changes
 auth.onAuthStateChanged(user => {
   if (user) {
@@ -100,6 +147,9 @@ auth.onAuthStateChanged(user => {
     // Save the display name of the logged in user
     userDisplayName = user.displayName
     setupUI(user)
+    completedRef.onSnapshot(snap => {
+      completed = snap.data().searches
+    })
   } else {
     console.log('User logged out')
     setupUI()
@@ -213,3 +263,8 @@ const setupUI = (user) => {
     userLoggedOut.forEach((item) => { item.style.display = 'block' })
   }
 }
+
+// Yummly API
+// let apiID = '48b24f4c'
+// let apiKey = '02786a5969bae14e1731a198ac0e88d6'
+// let queryUrl = `http://api.yummly.com/v1/api/recipes?_app_id=${apiID}&_app_key=${apiKey}&q=${searchTerm}&requirePictures=true`
