@@ -105,6 +105,7 @@ let displayResults = (json) => {
             <div class="card-body">  
               <h5>Ingredients</h5>  
               ${ingredientsHtml}</ul>
+              <button id="whisk-add-products">Add products to shopping list</button>
             </div>
           </div>
         </div>`
