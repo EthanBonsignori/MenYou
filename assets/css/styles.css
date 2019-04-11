@@ -10,7 +10,9 @@ body{
 #recipeTitle{
     width: 100%;
 }
-
+#ingredientsList{
+    width: 100%
+}
 #new-ingredient-field{
     color: green;   
 }
