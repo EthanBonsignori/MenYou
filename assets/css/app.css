@@ -1,0 +1,21 @@
+.recipe-title {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  font-size: 2rem;
+  text-align: center;
+  padding: 4px 8px;
+}
+
+.recipe-url-div {
+  color: #fff;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); 
+  width: 100%;
+  position: absolute;
+  top: 325px;
+  left: 0;
+}
+
+.recipe-img-overlay {
+  height: 50%;
+}

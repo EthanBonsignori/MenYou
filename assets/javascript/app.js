@@ -11,8 +11,6 @@ firebase.initializeApp(config)
 let db = firebase.firestore()
 let auth = firebase.auth()
 
-// Store displayName of logged in user globally
-let userDisplayName
 // Reference to all the cached searches in firestore
 let completed = []
 let completedRef = db.collection('completed').doc('searches')
@@ -86,21 +84,27 @@ let displayResults = (json) => {
       let path = json.hits[i].recipe
       let image = path.image
       let title = path.label
-      let ingredients = path.ingredientLines.length
-      let time = path.totalTime
+      let source = path.source
+      let ingredients = path.ingredientLines
+      let ingredientsHtml = '<ul>'
+      for (let j = 0; j < ingredients.length; j++) {
+        ingredientsHtml += `<li>${ingredients[j]}</li>`
+      }
       let url = path.url
       // Build each recipe
       recipeHtml +=
         `<div class="col-md-${columnWidth} mt-3">
           <div class="card recipe">
             <img src="${image}" class="card-img" alt="${title}">
-            <div class="card-body">
-              <h5 class="card-title lead">${title}</h5>
-              <h5 class="card-title">Ingredients</h5>  
-              <p class="card-text">${ingredients}</p>  
-              <h5 class="card-title">Prep Time</h5>
-              <p class="card-text">${time} mins.</p>
-              <a href="${url}" target="_blank" class="btn btn-success">View Recipe</a>
+            <div class="card-img-overlay recipe-img-overlay">
+              <p class="lead recipe-title" style="font-size:2rem; color:white;">${title}</p>
+              <div class="text-center recipe-url-div"
+                <small class="text-center recipe-url">View full recipe on <a href="${url}" target="_blank">${source} <i class="fas fa-external-link-alt"></i></a></small>
+              </div>
+            </div>
+            <div class="card-body">  
+              <h5>Ingredients</h5>  
+              ${ingredientsHtml}</ul>
             </div>
           </div>
         </div>`
@@ -130,12 +134,21 @@ let displayResults = (json) => {
 function showSpinner () {
   recipeDisplay.html(`
     <div class="d-flex justify-content-center">
-      <div class="spinner-border text-success mt-5" role="status" style="width: 5rem; height: 5rem;>
+      <div class="spinner-grow text-success mt-5" role="status" style="width: 5rem; height: 5rem;>
         <span class="sr-only"></span>
       </div>
     </div>`
   )
 }
+
+whisk.queue.push(function() {
+  whisk.listeners.addClickListener(
+    'whisk-add-products',
+    'shoppingList.addProductsToList', {
+      products: ['']
+    }
+  )
+})
 
 //
 // USER AUTH
@@ -143,15 +156,11 @@ function showSpinner () {
 // Listen for auth status changes
 auth.onAuthStateChanged(user => {
   if (user) {
-    console.log('User logged in', user)
-    // Save the display name of the logged in user
-    userDisplayName = user.displayName
     setupUI(user)
     completedRef.onSnapshot(snap => {
       completed = snap.data().searches
     })
   } else {
-    console.log('User logged out')
     setupUI()
   }
 })
