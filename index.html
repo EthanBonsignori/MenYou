@@ -104,6 +104,9 @@
                                 </button>
                             </label>
                             <input type="text" id="ingredientsList">
+                            <!-- hidden ingredient input -->
+                            <input type="text" id="addIngredient">
+                            <!---->
                             <label for="directions" class="col-form-label"><b>Directions</b></label>
                             <textarea class="form-control" id="recipeDirections"></textarea>
                         </form>
@@ -192,7 +195,11 @@
         </div>
       </div> <!-- End Login Modal -->
             
-           
+        <script type="text/javascript">
+            document.getElementById("new-ingredient-field").onclick = function(){
+                document.getElementById("addIngredient").style.display = "none"   
+            }
+        </script>  
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
         

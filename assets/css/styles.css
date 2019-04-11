@@ -13,6 +13,9 @@ body{
 #ingredientsList{
     width: 100%
 }
+#addIngredient{
+    display: none;
+}
 #new-ingredient-field{
     color: green;   
 }
