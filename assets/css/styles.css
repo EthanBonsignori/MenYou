@@ -11,8 +11,18 @@ body{
     width: 100%;
 }
 
-#new-ingredient-field{
-    color: green;   
+#ingredient-1{
+    width: 90%
+}
+
+#add-ingredient{
+    color: green; 
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 175%;
+    padding: 0;
+    margin-left: 2px;
+    position: unset;
 }
 .searchChoices{
     border: green;
@@ -20,8 +30,10 @@ body{
 }
 
 .container{
-    margin-top: 50px;
-
+    margin-top: 30px;
+}
+#welcome-user{
+    font-size: 150%;
 }
 
 .form-search{
