@@ -24,6 +24,9 @@ body{
     margin-left: 2px;
     position: unset;
 }
+#searchBOx{
+    background: white;
+}
 .searchChoices{
     border: green;
     margin-right: 20px;
