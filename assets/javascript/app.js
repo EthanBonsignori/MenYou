@@ -153,6 +153,50 @@ function showSpinner () {
 }
 
 //
+// USER RECIPE FORM
+//
+
+// Store the user recipe in an object so we can send it to firebase
+let userRecipe = {
+  title: '',
+  ingredients: [],
+  directions: ''
+}
+// Add new ingredient to list
+$(document).on('click', '#add-ingredient', (e) => {
+  e.preventDefault() // Prevent the form from sending
+  let newIngredient = $('#ingredient')
+  let ingredientList = $('#ingredients')
+  let ingredientText = newIngredient.val().trim()
+  ingredientList.append(`<li>${ingredientText} <button class="remove-ingredient" data-value="${ingredientText}"><i class="far fa-minus-square"></i></button></li>`)
+  userRecipe.ingredients.push(ingredientText)
+  newIngredient.val('')
+})
+
+// Remove ingredient from list
+$(document).on('click', '.remove-ingredient', function (e) {
+  e.preventDefault() // Prevent the form from sending
+  // Remove item from ingredients array
+  let removedIngredient = $(this).attr('data-value')
+  for (let i = userRecipe.ingredients.length; i >= 0; i--) {
+    if (userRecipe.ingredients[i] === removedIngredient) {
+      userRecipe.ingredients.splice(i, 1)
+      break
+    }
+  }
+  // Remove the list item
+  $(this).parent().remove()
+})
+
+$('#addFamilyRecipe').on('submit', (e) => {
+  e.preventDefault()
+  
+  userRecipe.title = $('#recipeTitle').val()
+  userRecipe.directions = $('#recipeDirections').val()
+  console.log(userRecipe)
+})
+
+//
 // USER AUTH
 //
 // Listen for auth status changes

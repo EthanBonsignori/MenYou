@@ -89,29 +89,29 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
                     <div class="modal-body">
                         <form id="recipe-form">
-                            <b>Recipe Title</b>
-                            <input type="text" id="recipeTitle"> 
-                            <div class="addIngredients">
-                                <label for="ingredient-1" class="col-form-label"><b>Ingredients</b></label>
-                                
-                                    <input type="text" id="ingredient-1" placeholder="add ingredient to recipe">
-                                        <button id="add-ingredient">
-                                            <i class="fas fa-plus-square"></i>
-                                        </button>
-                                    <label for="directions" class="col-form-label"><b>Directions</b></label>
-                                    <textarea class="form-control" id="recipeDirections"></textarea>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" value="Submit Button" id="submitRecipe">Submit</button>  
+                          <div class="form-group">
+                            <label for="recipeTitle"><b>Title</b></label>
+                            <input type="text" class="form-control" id="recipeTitle" required>
+                          </div>
+                          <div class="form-group position-relative">
+                            <label for="ingredient"><b>Ingredients</b> <small class="text-muted">(add each individually)</small></label>
+                            <input type="text" class="form-control" id="ingredient" placeholder="e.g. 1 cup flour, 2 tbsp salt">
+                            <div id="add-ingredient-div">
+                              <button id="add-ingredient"><i class="far fa-plus-square"></i></button>
+                            </div>
+                          </div>
+                          <ul id="ingredients"><!-- Ingredients append here --></ul>
+                          <div class="form-group">
+                            <label for="recipeDirections"><b>Directions</b></label>
+                            <textarea class="form-control" id="recipeDirections"></textarea>
+                          </div>
+                          <button type="submit" class="btn btn-success" id="submitRecipe">Submit</button>
+                        </form>
                     </div>
                 </div>
-            </div>
+              </div>
         </div><!--End of add Family Recipe modal-->
 
         <!-- Signup Modal -->
