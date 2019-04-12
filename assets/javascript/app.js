@@ -98,7 +98,7 @@ let displayResults = (json) => {
             <img src="${image}" class="card-img" alt="${title}">
             <div class="card-img-overlay recipe-img-overlay">
               <p class="lead recipe-title" style="font-size:2rem; color:white;">${title}</p>
-              <div class="text-center recipe-url-div"
+              <div class="text-center recipe-url-div">
                 <small class="text-center recipe-url">View full recipe on <a href="${url}" target="_blank">${source} <i class="fas fa-external-link-alt"></i></a></small>
               </div>
             </div>
