@@ -114,9 +114,8 @@ let displayResults = (json) => {
       whisk.queue.push(function() {
         $(document).on('click', `#whisk${i}`, (e) => {
           e.preventDefault()
-          whisk.shoppingList.addProductsToList({
+          whisk.shoppingList.addProductsToBasket({
               products: whiskIngredients,
-              trackView: false
             }
           )
         })
