@@ -155,14 +155,14 @@ function showSpinner () {
 //
 // USER RECIPE FORM
 //
-
 // Store the user recipe in an object so we can send it to firebase
 let userRecipe = {
   title: '',
   ingredients: [],
   directions: ''
 }
-// Add new ingredient to list
+
+// Add new ingredient to ingredient list
 $(document).on('click', '#add-ingredient', (e) => {
   e.preventDefault() // Prevent the form from sending
   let newIngredient = $('#ingredient')
@@ -184,21 +184,93 @@ $(document).on('click', '.remove-ingredient', function (e) {
       break
     }
   }
-  // Remove the list item
+  // Remove the list item from the page
   $(this).parent().remove()
 })
 
+// Get user recipe input and send it to firebase
 $('#addFamilyRecipe').on('submit', (e) => {
   e.preventDefault()
 
   userRecipe.title = $('#recipeTitle').val()
   userRecipe.directions = $('#recipeDirections').val()
   console.log(userRecipe)
-
-  $('#recipe-form').trigger('reset')
-  $('#ingredients').empty()
-  $('#addFamilyRecipe').modal('toggle')
+  let userName = $('#display-name').attr('data-value')
+  db.collection('user-recipes').add({
+    recipe: userRecipe,
+    addedBy: userName,
+    addedByID: auth.currentUser.uid
+  })
+  // Reset
+  $('#recipe-form').trigger('reset') // Reset every form field
+  $('#ingredients').empty() // Remove all the appended ingredient list items
+  $('#addFamilyRecipe').modal('toggle') // Hide the add recipe modal
+  // Reset the userRecipe object
+  userRecipe.title = ''
+  userRecipe.ingredients = []
+  userRecipe.directions = ''
 })
+
+// Show user recipes
+$(document).on('click', '#get-user-recipes', () => {
+  $('.recipeResults').empty()
+  db.collection('user-recipes').get()
+    .then((snap) => {
+      snap.docs.forEach((doc) => {
+        displayUserRecipes(doc.data(), doc.id)
+      })
+    })
+})
+
+// Generate html for user recipes
+let displayUserRecipes = (data, id) => {
+  let recipe = data.recipe
+  let num = Math.floor(100000 + Math.random() * 900000)
+  let recipeHTML = `
+    <div class="row" data-id="${id}">
+      <div class="col-12">
+        <div class="card mt-3">
+          <div class="card-header">
+            <h5 class="d-inline">${recipe.title}</h5>
+            <div class="d-inline ml-2">
+              <small class="text-muted">Added by: ${data.addedBy}</small>
+            </div>`
+  let userID = auth.currentUser.uid
+  if (data.addedByID === userID) {
+    recipeHTML += `<button class="btn btn-danger delete" data-toggle="modal" data-target="#modal-delete"><i class="fas fa-trash-alt"></i></button>`
+  }
+  recipeHTML += ` 
+        </div>
+          <div class="card-body">
+            <h5 class="card-title">Ingredients <button class="btn btn-success" id="whisk${num}">Get ingredients</button></h5>`
+  recipeHTML += generateIngredientList(recipe.ingredients)
+  recipeHTML += `
+            <h5 class="card-title">Directions</h5>
+            <p class="card-text">${recipe.directions}</p>
+          </div>
+        </div>
+      </div>
+    </div>`
+  whisk.queue.push(function () {
+    $(document).on('click', `#whisk${num}`, (e) => {
+      e.preventDefault()
+      whisk.shoppingList.addProductsToBasket({
+        products: recipe.ingredients
+      })
+    })
+  })
+  $('.recipeResults').append(recipeHTML)
+}
+
+// Create ingredient list out of the array of ingredients from firebase
+let generateIngredientList = (ingredients) => {
+  let ingredientsList = '<ul class="row">'
+  for (let i = 0; i < ingredients.length; i++) {
+    ingredientsList += `<li class="col-6">${ingredients[i]}</li>`
+  }
+  ingredientsList += '</ul>'
+  return ingredientsList
+}
 
 //
 // USER AUTH
@@ -302,7 +374,7 @@ const setupUI = (user) => {
   // if logged in
   if (user) {
     db.collection('users').doc(user.uid).get().then(doc => {
-      userWelcome.text(`Welcome, ${doc.data().displayName}`)
+      userWelcome.html(`Welcome, <span id="display-name" data-value="${doc.data().displayName}">${doc.data().displayName}</span>`)
       // Show account info
       // $('#display-name').attr('data-value', doc.data().displayName)
       // $('#user-display-name').text(doc.data().displayName)

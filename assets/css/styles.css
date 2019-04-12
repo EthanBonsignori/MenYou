@@ -12,45 +12,6 @@ body{
     margin: 10px;
 }
 
-#add-ingredient-div {
-  position: absolute;
-  width: auto;
-  bottom: -5px;
-  right: 0;
-  margin-top: 0;
-  cursor: pointer;
-  pointer-events: all; 
-}
-  #add-ingredient {
-    color: #28a745;
-    font-size: 2rem;
-    outline: none;
-    border: none;
-    -webkit-appearance: none;
-    background: none;
-  }
-    #add-ingredient:hover {
-      color: #218838
-    }
-  .remove-ingredient {
-    position: absolute;
-    left: 10px;
-    color: #dc3545;
-    opacity: 0.5;
-    font-size: 1rem;
-    outline: none;
-    border: none;
-    -webkit-appearance: none;
-    background: none;
-  }
-    .remove-ingredient:hover {
-      color: #c82333;
-      opacity: 1;
-    }
-    .remove-ingredient:focus {
-      outline: none;
-    }
-
 #searchBox{
     background: white;
 }
@@ -76,6 +37,47 @@ body{
     border-width: medium;
     margin-right: 5px;
 }
+
+/* User recipes */
+#add-ingredient-div {
+  position: absolute;
+  width: auto;
+  bottom: -5px;
+  right: 0;
+  margin-top: 0;
+  cursor: pointer;
+  pointer-events: all; 
+}
+  #add-ingredient {
+    color: #28a745;
+    font-size: 2rem;
+    outline: none;
+    border: none;
+    -webkit-appearance: none;
+    background: none;
+  }
+    #add-ingredient:hover {
+      color: #218838
+    }
+    
+.remove-ingredient {
+  position: absolute;
+  left: 10px;
+  color: #dc3545;
+  opacity: 0.5;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  background: none;
+}
+  .remove-ingredient:hover {
+    color: #c82333;
+    opacity: 1;
+  }
+  .remove-ingredient:focus {
+    outline: none;
+  }
 
 /* Account */
 .logged-in, .logged-out {
@@ -129,5 +131,33 @@ body{
   display: inline
 }
 
+/* Confirm Delete */
+#confirm-delete-button, #cancel-delete-button {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 
+/* Recipe Display */
+.recipe-title {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  font-size: 2rem;
+  text-align: center;
+  padding: 4px 8px;
+}
 
+.recipe-url-div {
+  color: #fff;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); 
+  width: 100%;
+  position: absolute;
+  top: 325px;
+  left: 0;
+}
+
+.recipe-img-overlay {
+  height: 50%;
+}
