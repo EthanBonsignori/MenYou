@@ -86,9 +86,11 @@ let displayResults = (json) => {
       let title = path.label
       let source = path.source
       let ingredients = path.ingredientLines
+      let whiskIngredients = []
       let ingredientsHtml = '<ul>'
       for (let j = 0; j < ingredients.length; j++) {
         ingredientsHtml += `<li>${ingredients[j]}</li>`
+        whiskIngredients.push(ingredients[j])
       }
       let url = path.url
       // Build each recipe
@@ -105,9 +107,20 @@ let displayResults = (json) => {
             <div class="card-body">  
               <h5>Ingredients</h5>  
               ${ingredientsHtml}</ul>
+              <button class="btn btn-success" id="whisk${i}">Get ingredients</button>
             </div>
           </div>
         </div>`
+      whisk.queue.push(function() {
+        $(document).on('click', `#whisk${i}`, (e) => {
+          e.preventDefault()
+          whisk.shoppingList.addProductsToList({
+              products: whiskIngredients,
+              trackView: false
+            }
+          )
+        })
+      })
     }
     rows++
     if (rows % columns === 0) {
@@ -140,15 +153,6 @@ function showSpinner () {
     </div>`
   )
 }
-
-whisk.queue.push(function() {
-  whisk.listeners.addClickListener(
-    'whisk-add-products',
-    'shoppingList.addProductsToList', {
-      products: ['']
-    }
-  )
-})
 
 //
 // USER AUTH
