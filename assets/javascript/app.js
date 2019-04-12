@@ -105,13 +105,17 @@ let displayResults = (json) => {
               </div>
             </div>
             <div class="card-body">  
-              <h5>Ingredients</h5>  
+              <h5>Ingredients <button class="btn btn-success" id="whisk${i}" 
+                data-toggle="tooltip" data-placement="top" title="Add all ingredients to shopping cart">
+                  <i class="fas fa-shopping-cart"></i>
+                </button>
+              </h5>  
               ${ingredientsHtml}</ul>
-              <button class="btn btn-success" id="whisk${i}">Get ingredients</button>
+              
             </div>
           </div>
         </div>`
-      whisk.queue.push(function() {
+      whisk.queue.push(function () {
         $(document).on('click', `#whisk${i}`, (e) => {
           e.preventDefault()
           whisk.shoppingList.addProductsToBasket({
@@ -140,6 +144,10 @@ let displayResults = (json) => {
       </div>`
   }
   recipeDisplay.html(recipeHtml)
+  // Get bootstrap tooltips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 }
 
 function showSpinner () {
@@ -235,14 +243,24 @@ let displayUserRecipes = (data, id) => {
             <div class="d-inline ml-2">
               <small class="text-muted">Added by: ${data.addedBy}</small>
             </div>`
+  // Add a delete button if the user created this recipe
   let userID = auth.currentUser.uid
   if (data.addedByID === userID) {
-    recipeHTML += `<button class="btn btn-danger delete" data-toggle="modal" data-target="#modal-delete"><i class="fas fa-trash-alt"></i></button>`
+    recipeHTML += `
+            <span class="delete" data-toggle="tooltip" data-placement="top" title="Delete Recipe">
+              <button class="btn btn-danger" data-toggle="modal" data-target="#modal-delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </span>`
   }
   recipeHTML += ` 
         </div>
           <div class="card-body">
-            <h5 class="card-title">Ingredients <button class="btn btn-success" id="whisk${num}">Get ingredients</button></h5>`
+            <h5 class="card-title">Ingredients <button class="btn btn-success" id="whisk${num}" 
+            data-toggle="tooltip" data-placement="top" title="Add all ingredients to shopping cart">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            </h5>`
   recipeHTML += generateIngredientList(recipe.ingredients)
   recipeHTML += `
             <h5 class="card-title">Directions</h5>
@@ -260,6 +278,10 @@ let displayUserRecipes = (data, id) => {
     })
   })
   $('.recipeResults').append(recipeHTML)
+  // Get bootstrap tooltips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 }
 
 // Create ingredient list out of the array of ingredients from firebase

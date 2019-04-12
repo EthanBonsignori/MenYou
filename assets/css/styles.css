@@ -131,7 +131,13 @@ body{
   display: inline
 }
 
-/* Confirm Delete */
+/* Delete Recipe */
+.delete {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+
 #confirm-delete-button, #cancel-delete-button {
   padding-left: 2rem;
   padding-right: 2rem;
@@ -159,5 +165,5 @@ body{
 }
 
 .recipe-img-overlay {
-  height: 50%;
+  height: 348px;
 }
