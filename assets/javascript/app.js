@@ -212,7 +212,7 @@ $('#addFamilyRecipe').on('submit', (e) => {
   // Reset
   $('#recipe-form').trigger('reset') // Reset every form field
   $('#ingredients').empty() // Remove all the appended ingredient list items
-  $('#addFamilyRecipe').modal('toggle') // Hide the add recipe modal
+  $('#addFamilyRecipe').modal('hide') // Hide the add recipe modal
   // Reset the userRecipe object
   userRecipe.title = ''
   userRecipe.ingredients = []
@@ -302,16 +302,16 @@ let generateIngredientList = (ingredients) => {
 let deleteID
 $(document).on('click', '.delete', function () {
   deleteID = $(this).attr('data-id')
-  $('#modal-delete').modal('toggle')
+  $('#modal-delete').modal('show')
 })
 
 // Confirm and delete
-$(document).on('click', '#confirm-delete', () => {
+$('#confirm-delete').on('click', () => {
   db.collection('user-recipes').doc(deleteID)
     .delete()
     .then(() => {
       console.log('Recipe deleted succesfully')
-      $('#modal-delete').modal('toggle') // Hide the modal
+      $('#modal-delete').modal('hide') // Hide the modal
       getUserRecipes() // Show all the user recipes again minus the deleted one
     }).catch((error) => {
       console.error(`Error deleting recipe ${error}`)
@@ -319,8 +319,8 @@ $(document).on('click', '#confirm-delete', () => {
 })
 
 // Cancel deletion
-$(document).on('click', '#cancel-delete', () => {
-  $('#modal-delete').modal('toggle') // Hide the modal
+$('#cancel-delete').on('click', () => {
+  $('#modal-delete').modal('hide') // Hide the modal
 })
 
 //
