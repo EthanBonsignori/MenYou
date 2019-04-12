@@ -115,9 +115,8 @@ let displayResults = (json) => {
         $(document).on('click', `#whisk${i}`, (e) => {
           e.preventDefault()
           whisk.shoppingList.addProductsToBasket({
-              products: whiskIngredients,
-            }
-          )
+            products: whiskIngredients
+          })
         })
       })
     }
@@ -250,26 +249,29 @@ logout.on('click', (e) => {
 // Hide and show html elements based on whether user is logged in or out
 const userLoggedOut = document.querySelectorAll('.logged-out')
 const userLoggedIn = document.querySelectorAll('.logged-in')
+const userWelcome = $('#welcome-user')
 const setupUI = (user) => {
   // if logged in
   if (user) {
     db.collection('users').doc(user.uid).get().then(doc => {
+      userWelcome.text(`Welcome, ${doc.data().displayName}`)
       // Show account info
-      $('#display-name').attr('data-value', doc.data().displayName)
-      $('#user-display-name').text(doc.data().displayName)
-      $('#user-email').text(user.email)
-      $('#user-account-created').text(user.metadata.creationTime)
+      // $('#display-name').attr('data-value', doc.data().displayName)
+      // $('#user-display-name').text(doc.data().displayName)
+      // $('#user-email').text(user.email)
+      // $('#user-account-created').text(user.metadata.creationTime)
     })
     // Show UI elements
     userLoggedIn.forEach((item) => { item.style.display = 'block' })
     userLoggedOut.forEach((item) => { item.style.display = 'none' })
   // if logged out
   } else {
+    userWelcome.text(`Welcome`)
     // Hide account details
-    $('#display-name').attr('data-value', '')
-    $('#user-display-name').text('')
-    $('#user-email').text('')
-    $('#user-account-created').text('')
+    // $('#display-name').attr('data-value', '')
+    // $('#user-display-name').text('')
+    // $('#user-email').text('')
+    // $('#user-account-created').text('')
     // Hide UI elements
     userLoggedIn.forEach((item) => { item.style.display = 'none' })
     userLoggedOut.forEach((item) => { item.style.display = 'block' })
