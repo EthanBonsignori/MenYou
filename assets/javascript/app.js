@@ -190,10 +190,14 @@ $(document).on('click', '.remove-ingredient', function (e) {
 
 $('#addFamilyRecipe').on('submit', (e) => {
   e.preventDefault()
-  
+
   userRecipe.title = $('#recipeTitle').val()
   userRecipe.directions = $('#recipeDirections').val()
   console.log(userRecipe)
+
+  $('#recipe-form').trigger('reset')
+  $('#ingredients').empty()
+  $('#addFamilyRecipe').modal('toggle')
 })
 
 //
