@@ -138,7 +138,7 @@ body{
   top: 6px;
 }
 
-#confirm-delete-button, #cancel-delete-button {
+#confirm-delete, #cancel-delete {
   padding-left: 2rem;
   padding-right: 2rem;
   margin-left: 1rem;

@@ -139,7 +139,7 @@ let displayResults = (json) => {
   } else {
     recipeHtml +=
       `<div class="text-center text-danger">
-          <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${searchTerm}<span></h3>
+          <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${search}<span></h3>
         </div>
       </div>`
   }
@@ -221,6 +221,10 @@ $('#addFamilyRecipe').on('submit', (e) => {
 
 // Show user recipes
 $(document).on('click', '#get-user-recipes', () => {
+  getUserRecipes()
+})
+
+let getUserRecipes = () => {
   $('.recipeResults').empty()
   db.collection('user-recipes').get()
     .then((snap) => {
@@ -228,27 +232,27 @@ $(document).on('click', '#get-user-recipes', () => {
         displayUserRecipes(doc.data(), doc.id)
       })
     })
-})
+}
 
 // Generate html for user recipes
 let displayUserRecipes = (data, id) => {
   let recipe = data.recipe
   let num = Math.floor(100000 + Math.random() * 900000)
   let recipeHTML = `
-    <div class="row" data-id="${id}">
+    <div class="row">
       <div class="col-12">
         <div class="card mt-3">
           <div class="card-header">
-            <h5 class="d-inline">${recipe.title}</h5>
+            <h5 class="d-inline lead"><b>${recipe.title}</b></h5>
             <div class="d-inline ml-2">
-              <small class="text-muted">Added by: ${data.addedBy}</small>
+              <small class="text-muted">Created by <b>${data.addedBy}</b></small>
             </div>`
   // Add a delete button if the user created this recipe
   let userID = auth.currentUser.uid
   if (data.addedByID === userID) {
     recipeHTML += `
-            <span class="delete" data-toggle="tooltip" data-placement="top" title="Delete Recipe">
-              <button class="btn btn-danger" data-toggle="modal" data-target="#modal-delete">
+            <span data-id="${id}" class="delete" data-toggle="tooltip" data-placement="top" title="Delete Recipe">
+              <button class="btn btn-danger">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </span>`
@@ -293,6 +297,31 @@ let generateIngredientList = (ingredients) => {
   ingredientsList += '</ul>'
   return ingredientsList
 }
+
+// Delete User recipe
+let deleteID
+$(document).on('click', '.delete', function () {
+  deleteID = $(this).attr('data-id')
+  $('#modal-delete').modal('toggle')
+})
+
+// Confirm and delete
+$(document).on('click', '#confirm-delete', () => {
+  db.collection('user-recipes').doc(deleteID)
+    .delete()
+    .then(() => {
+      console.log('Recipe deleted succesfully')
+      $('#modal-delete').modal('toggle') // Hide the modal
+      getUserRecipes() // Show all the user recipes again minus the deleted one
+    }).catch((error) => {
+      console.error(`Error deleting recipe ${error}`)
+    })
+})
+
+// Cancel deletion
+$(document).on('click', '#cancel-delete', () => {
+  $('#modal-delete').modal('toggle') // Hide the modal
+})
 
 //
 // USER AUTH
