@@ -12,23 +12,6 @@ body{
     margin: 10px;
 }
 
-#recipeTitle{
-    width: 100%;
-}
-
-#ingredient-1{
-    width: 90%
-}
-
-#add-ingredient{
-    color: green; 
-    background-color: transparent;
-    border-color: transparent;
-    font-size: 175%;
-    padding: 0;
-    margin-left: 2px;
-    position: unset;
-}
 #searchBox{
     background: white;
 }
@@ -55,57 +38,132 @@ body{
     margin-right: 5px;
 }
 
+/* User recipes */
+#add-ingredient-div {
+  position: absolute;
+  width: auto;
+  bottom: -5px;
+  right: 0;
+  margin-top: 0;
+  cursor: pointer;
+  pointer-events: all; 
+}
+  #add-ingredient {
+    color: #28a745;
+    font-size: 2rem;
+    outline: none;
+    border: none;
+    -webkit-appearance: none;
+    background: none;
+  }
+    #add-ingredient:hover {
+      color: #218838
+    }
+    
+.remove-ingredient {
+  position: absolute;
+  left: 10px;
+  color: #dc3545;
+  opacity: 0.5;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  background: none;
+}
+  .remove-ingredient:hover {
+    color: #c82333;
+    opacity: 1;
+  }
+  .remove-ingredient:focus {
+    outline: none;
+  }
+
 /* Account */
 .logged-in, .logged-out {
-display: none;
+  display: none;
 } 
 #login-button, #signup-button {
-position: relative;
-bottom: 0;
-left:0;
-width: 107%;
-padding: 1rem;
-margin: 2rem 0 -1rem -1rem ;
+  position: relative;
+  bottom: 0;
+  left:0;
+  width: 107%;
+  padding: 1rem;
+  margin: 2rem 0 -1rem -1rem ;
 
-border-top-right-radius: 0;
-border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 .password-toggle {
-color: rgb(190, 190, 190);
-position: absolute;
-width: auto;
-bottom: 8px;
-right: 10px;
-margin-top: 0;
-cursor: pointer;
-pointer-events: all; 
+  color: rgb(190, 190, 190);
+  position: absolute;
+  width: auto;
+  bottom: 8px;
+  right: 10px;
+  margin-top: 0;
+  cursor: pointer;
+  pointer-events: all; 
 }
 .password-toggle:hover {
-    color: rgb(170, 170, 170);
+  color: rgb(170, 170, 170);
 }
 .password-toggle:active {
-    color: rgb(150, 150, 150);
+  color: rgb(150, 150, 150);
 }
 
 #password-match {
-position: absolute;
-width: auto;
-bottom: 10px;
-right: 10px;
-margin-top: 0;
+  position: absolute;
+  width: auto;
+  bottom: 10px;
+  right: 10px;
+  margin-top: 0;
 }
 #password-match #no-match {
-    color: red;
-    display: none;
+  color: red;
+  display: none;
 }
 #password-match #match {
-    color: green;
-    display: none;
+  color: green;
+  display: none;
 }
 
 #password-login-response, #password-response {
-display: inline
+  display: inline
 }
 
+/* Delete Recipe */
+.delete {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
 
+#confirm-delete, #cancel-delete {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 
+/* Recipe Display */
+.recipe-title {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  font-size: 2rem;
+  text-align: center;
+  padding: 4px 8px;
+}
+
+.recipe-url-div {
+  color: #fff;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); 
+  width: 100%;
+  position: absolute;
+  top: 325px;
+  left: 0;
+}
+
+.recipe-img-overlay {
+  height: 348px;
+}
