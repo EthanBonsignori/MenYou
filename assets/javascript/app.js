@@ -305,11 +305,17 @@ let displayUserRecipes = (data, id) => {
     <div class="row">
       <div class="col-12">
         <div class="card mt-3">
-          <div class="card-header">
+          <div class="card-header user-recipe-card-header">
             <h5 class="d-inline lead"><b>${recipe.title}</b></h5>
             <div class="d-inline ml-2">
               <small class="text-muted">Created by <b>${data.addedBy}</b></small>
-            </div>`
+            </div>
+            <button class="collapsed btn btn-collapse" type="button" data-toggle="collapse" data-target="#collapse${num}">
+              <i class="fa fa-chevron-down"></i>
+            </button>
+          </div>
+          <div class="collapse" id="collapse${num}">
+          <div class="card-body">`
   // Add a delete button if the user created this recipe
   let userID = auth.currentUser.uid
   if (data.addedByID === userID) {
@@ -320,9 +326,7 @@ let displayUserRecipes = (data, id) => {
               </button>
             </span>`
   }
-  recipeHTML += ` 
-        </div>
-          <div class="card-body">
+  recipeHTML += `
             <h5 class="card-title">Ingredients <button class="btn btn-success" id="whisk${num}" 
             data-toggle="tooltip" data-placement="top" title="Add all ingredients to shopping cart">
               <i class="fas fa-shopping-cart"></i>
@@ -330,8 +334,9 @@ let displayUserRecipes = (data, id) => {
             </h5>`
   recipeHTML += generateIngredientList(recipe.ingredients)
   recipeHTML += `
-            <h5 class="card-title">Directions</h5>
-            <p class="card-text">${recipe.directions}</p>
+              <h5 class="card-title">Directions</h5>
+              <p class="card-text">${recipe.directions}</p>
+            </div>
           </div>
         </div>
       </div>
