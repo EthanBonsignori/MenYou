@@ -35,12 +35,14 @@ https://developer.edamam.com/edamam-recipe-api
 
 # Contact Information
 
-Ethan Bonsignori
+# Ethan Bonsignori
 ![Ethan Photo](assets/images/Ethan.jpeg)
+
 https://github.com/EthanBonsignori
 
-Whitney Crawford
+# Whitney Crawford
 ![Whitney Photo](assets/images/Whitney.jpg)
+
 https://github.com/whitney227
 
 
