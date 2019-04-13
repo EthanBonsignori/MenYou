@@ -1,6 +1,6 @@
 # MenYou
 
-![Image of MenYou] (assets/MenYou-image.png)
+![Image of MenYou](assets/images/MenYou-image.png)
 https://ethanbonsignori.github.io/Project-1/
 
 MenYou is a recipe database that allows users to search recipes and add ingredients to a shopping cart. Our goal is to allow users to meal plan and shop a location all within a few clicks.
@@ -36,11 +36,11 @@ https://developer.edamam.com/edamam-recipe-api
 # Contact Information
 
 Ethan Bonsignori
-![Ethan Photo] (assets/Ethan.jpeg)
+![Ethan Photo](assets/images/Ethan.jpeg)
 https://github.com/EthanBonsignori
 
 Whitney Crawford
-![Whitney Photo] (assets/Portfolio Pic.jpg)
+![Whitney Photo](assets/images/Whitney.jpg)
 https://github.com/whitney227
 
 
