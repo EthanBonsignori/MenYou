@@ -167,3 +167,26 @@ body{
 .recipe-img-overlay {
   height: 348px;
 }
+
+/* Input Errors */
+.error {
+  width  : 100%;
+  padding: 0;
+ 
+  font-size: 80%;
+  color: #fff;
+  background-color: red;
+  border-radius: 0 0 5px 5px;
+ 
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+  .error.active {
+    padding: 0.3em;
+  }
+
+#ingredients-error {
+  position: absolute;
+  width: auto;
+  margin-bottom: 5px;
+}
