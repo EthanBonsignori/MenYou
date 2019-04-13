@@ -1,5 +1,6 @@
 # MenYou
 
+![Image of MenYou] (/assets/MenYou-image.png)
 https://ethanbonsignori.github.io/Project-1/
 
 MenYou is a recipe database that allows users to search recipes and add ingredients to a shopping cart. Our goal is to allow users to meal plan and shop a location all within a few clicks.
@@ -27,8 +28,21 @@ Added family recipes are also stored in Firebase and can be retrieved as a JSON 
 * Font Awesome
 
 * Whisk (food technology platform)
+https://whisk.com/
 
 * Edamam's Developer API for Recipe Search
+https://developer.edamam.com/edamam-recipe-api
+
+# Contact Information
+
+Ethan Bonsignori
+![Ethan Photo] (/assets/Ethan.jpeg)
+https://github.com/EthanBonsignori
+
+Whitney Crawford
+![Whitney Photo] (/assets/Portfolio Pic.jpg)
+https://github.com/whitney227
+
 
 
 
