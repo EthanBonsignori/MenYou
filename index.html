@@ -63,14 +63,18 @@
         </div>
 
         <div class="container">
-            <form class="form-search row" id="searchForm">
-                <input class="col-10" type="text" placeholder="Search Recipes" id="searchBox">
-                <button class="col-2 btn-outline-success" type="submit">Search</button>
+          <div class="row">
+            <div class="col-12">
+            <form class="form-search d-flex" id="searchForm">
+                <input class="w-100" type="text" placeholder="Search Recipes" id="searchBox">
+                <button class="pr-5 pl-5 btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
             </form>
             <button id="get-user-recipes">View User Added Recipes</button>
             <!--Div where searched recipes will display-->  
             <div class="recipeResults">
             </div>
+          </div>
+          </div>
         </div>
 
         <!--Modal that opens to add Family recipe-->
@@ -84,10 +88,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="recipe-form">
+                        <div id="recipe-form">
                           <div class="form-group">
                             <label for="recipeTitle"><b>Title</b></label>
-                            <input type="text" class="form-control" id="recipeTitle" required>
+                            <input type="text" class="form-control" id="recipeTitle">
+                            <span id="title-error" class="error" aria-live="polite"></span>
                           </div>
                           <div class="form-group position-relative">
                             <label for="ingredient"><b>Ingredients</b> <small class="text-muted">(add each individually)</small></label>
@@ -95,14 +100,16 @@
                             <div id="add-ingredient-div">
                               <button id="add-ingredient"><i class="far fa-plus-square"></i></button>
                             </div>
+                            <span id="ingredients-error" class="error" aria-live="polite"></span>
                           </div>
                           <ul id="ingredients"><!-- Ingredients append here --></ul>
                           <div class="form-group">
                             <label for="recipeDirections"><b>Directions</b></label>
                             <textarea class="form-control" id="recipeDirections"></textarea>
+                            <span id="directions-error" class="error" aria-live="polite"></span>
                           </div>
                           <button type="submit" class="btn btn-success" id="submitRecipe">Submit</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
               </div>

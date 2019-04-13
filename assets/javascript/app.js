@@ -169,17 +169,38 @@ let userRecipe = {
   ingredients: [],
   directions: ''
 }
+const titleErr = $('#title-error')
+const ingreErr = $('#ingredients-error')
+const direcErr = $('#directions-error')
 
 // Add new ingredient to ingredient list
 $(document).on('click', '#add-ingredient', (e) => {
   e.preventDefault() // Prevent the form from sending
+  let validIngredient = true
   let newIngredient = $('#ingredient')
   let ingredientList = $('#ingredients')
   let ingredientText = newIngredient.val().trim()
-  ingredientList.append(`<li>${ingredientText} <button class="remove-ingredient" data-value="${ingredientText}"><i class="far fa-minus-square"></i></button></li>`)
-  userRecipe.ingredients.push(ingredientText)
-  newIngredient.val('')
+  if (ingredientText === '') {
+    ingreErr.text('Add some text!')
+    ingreErr.addClass('active')
+    validIngredient = false
+  } else {
+    ingreErr.text('')
+    ingreErr.removeClass('active')
+  }
+  if (validIngredient) {
+    ingredientList.append(`<li>${ingredientText} <button class="remove-ingredient" data-value="${ingredientText}"><i class="far fa-minus-square"></i></button></li>`)
+    userRecipe.ingredients.push(ingredientText)
+    newIngredient.val('')
+  }
 })
+
+$(document).ready(function(){
+  $('#ingredient').keypress(function(e){
+    if (e.keyCode === 13)
+    $('#add-ingredient').click();
+  });
+});
 
 // Remove ingredient from list
 $(document).on('click', '.remove-ingredient', function (e) {
@@ -197,27 +218,69 @@ $(document).on('click', '.remove-ingredient', function (e) {
 })
 
 // Get user recipe input and send it to firebase
-$('#addFamilyRecipe').on('submit', (e) => {
+$('#submitRecipe').on('click', (e) => {
   e.preventDefault()
-
   userRecipe.title = $('#recipeTitle').val()
   userRecipe.directions = $('#recipeDirections').val()
   console.log(userRecipe)
-  let userName = $('#display-name').attr('data-value')
-  db.collection('user-recipes').add({
-    recipe: userRecipe,
-    addedBy: userName,
-    addedByID: auth.currentUser.uid
-  })
-  // Reset
-  $('#recipe-form').trigger('reset') // Reset every form field
-  $('#ingredients').empty() // Remove all the appended ingredient list items
-  $('#addFamilyRecipe').modal('hide') // Hide the add recipe modal
-  // Reset the userRecipe object
-  userRecipe.title = ''
-  userRecipe.ingredients = []
-  userRecipe.directions = ''
+  let isValid = checkValidity(userRecipe)
+  if (isValid) {
+    let userName = $('#display-name').attr('data-value')
+    db.collection('user-recipes').add({
+      recipe: userRecipe,
+      addedBy: userName,
+      addedByID: auth.currentUser.uid
+    })
+    // Reset
+    $('#recipe-form').trigger('reset') // Reset every form field
+    $('#ingredients').empty() // Remove all the appended ingredient list items
+    $('#addFamilyRecipe').modal('hide') // Hide the add recipe modal
+    // Reset the userRecipe object
+    userRecipe.title = ''
+    userRecipe.ingredients = []
+    userRecipe.directions = ''
+  }
 })
+
+let checkValidity = (userRecipe) => {
+  let err = 0
+
+  // Check title
+  if (userRecipe.title === '') {
+    titleErr.text('A title is required')
+    titleErr.addClass('active')
+    err++
+  } else {
+    titleErr.text('')
+    titleErr.removeClass('active')
+  }
+  
+  // Check ingredients array
+  if (userRecipe.ingredients.length === 0) {
+    ingreErr.text('You must add one or more ingredients')
+    ingreErr.addClass('active')
+    err++
+  } else {
+    ingreErr.text('')
+    ingreErr.removeClass('active')
+  }
+
+  // Check directions
+  if (userRecipe.directions.length === 0) {
+    direcErr.text('Add some directions')
+    direcErr.addClass('active')
+    err++
+  } else {
+    direcErr.text('')
+    direcErr.removeClass('active')
+  }
+
+  if (err > 0) {
+    return false
+  } else {
+    return true
+  }
+}
 
 // Show user recipes
 $(document).on('click', '#get-user-recipes', () => {
@@ -321,6 +384,12 @@ $('#confirm-delete').on('click', () => {
 // Cancel deletion
 $('#cancel-delete').on('click', () => {
   $('#modal-delete').modal('hide') // Hide the modal
+})
+
+// Allows user to dismiss errors by clicking on them
+$(document).on('click', '.error', function () {
+  $(this).text('')
+  $(this).removeClass('active')
 })
 
 //
