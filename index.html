@@ -8,6 +8,9 @@
     <!-- User CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
@@ -52,7 +55,7 @@
                       </li>
                       <li class="nav-item logged-in">
                           <button class="btn btn-danger" id="logout" style="color: white">Logout</button>
-                     </li>  
+                     </li>
                 </ul>    
             </div>
         </nav>
@@ -60,6 +63,9 @@
         <div class="container text-center">
             <!-- for the login welcome -->
             <h5 class="lead" id="welcome-user">Welcome</h5>
+            <div class="logged-in">
+              <button class="btn btn-primary" id="get-user-recipes">View User Added Recipes</button>
+            </div>
         </div>
 
         <div class="container">
@@ -69,7 +75,6 @@
                 <input class="w-100" type="text" placeholder="Search Recipes" id="searchBox">
                 <button class="pr-5 pl-5 btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
             </form>
-            <button id="get-user-recipes">View User Added Recipes</button>
             <!--Div where searched recipes will display-->  
             <div class="recipeResults">
             </div>

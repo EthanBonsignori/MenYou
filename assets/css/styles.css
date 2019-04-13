@@ -134,8 +134,8 @@ body{
 /* Delete Recipe */
 .delete {
   position: absolute;
-  right: 6px;
-  top: 6px;
+  right: 10px;
+  top: 60px;
 }
 
 #confirm-delete, #cancel-delete {
@@ -190,3 +190,27 @@ body{
   width: auto;
   margin-bottom: 5px;
 }
+
+/* Collapse User Recipe */
+.btn-collapse {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: none !important;
+}
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  color: #000000;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.user-recipe-card-header {
+  position: relative;
+} 
