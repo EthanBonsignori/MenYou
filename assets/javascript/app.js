@@ -105,19 +105,22 @@ let displayResults = (json) => {
               </div>
             </div>
             <div class="card-body">  
-              <h5>Ingredients</h5>  
+              <h5>Ingredients <button class="btn btn-success" id="whisk${i}" 
+                data-toggle="tooltip" data-placement="top" title="Add all ingredients to shopping cart">
+                  <i class="fas fa-shopping-cart"></i>
+                </button>
+              </h5>  
               ${ingredientsHtml}</ul>
-              <button class="btn btn-success" id="whisk${i}">Get ingredients</button>
+              
             </div>
           </div>
         </div>`
-      whisk.queue.push(function() {
+      whisk.queue.push(function () {
         $(document).on('click', `#whisk${i}`, (e) => {
           e.preventDefault()
           whisk.shoppingList.addProductsToBasket({
-              products: whiskIngredients,
-            }
-          )
+            products: whiskIngredients
+          })
         })
       })
     }
@@ -136,11 +139,15 @@ let displayResults = (json) => {
   } else {
     recipeHtml +=
       `<div class="text-center text-danger">
-          <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${searchTerm}<span></h3>
+          <h3><i class="fas fa-exclamation-circle"></i> Could not find any results for: <span class="lead">${search}<span></h3>
         </div>
       </div>`
   }
   recipeDisplay.html(recipeHtml)
+  // Get bootstrap tooltips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 }
 
 function showSpinner () {
@@ -152,6 +159,169 @@ function showSpinner () {
     </div>`
   )
 }
+
+//
+// USER RECIPE FORM
+//
+// Store the user recipe in an object so we can send it to firebase
+let userRecipe = {
+  title: '',
+  ingredients: [],
+  directions: ''
+}
+
+// Add new ingredient to ingredient list
+$(document).on('click', '#add-ingredient', (e) => {
+  e.preventDefault() // Prevent the form from sending
+  let newIngredient = $('#ingredient')
+  let ingredientList = $('#ingredients')
+  let ingredientText = newIngredient.val().trim()
+  ingredientList.append(`<li>${ingredientText} <button class="remove-ingredient" data-value="${ingredientText}"><i class="far fa-minus-square"></i></button></li>`)
+  userRecipe.ingredients.push(ingredientText)
+  newIngredient.val('')
+})
+
+// Remove ingredient from list
+$(document).on('click', '.remove-ingredient', function (e) {
+  e.preventDefault() // Prevent the form from sending
+  // Remove item from ingredients array
+  let removedIngredient = $(this).attr('data-value')
+  for (let i = userRecipe.ingredients.length; i >= 0; i--) {
+    if (userRecipe.ingredients[i] === removedIngredient) {
+      userRecipe.ingredients.splice(i, 1)
+      break
+    }
+  }
+  // Remove the list item from the page
+  $(this).parent().remove()
+})
+
+// Get user recipe input and send it to firebase
+$('#addFamilyRecipe').on('submit', (e) => {
+  e.preventDefault()
+
+  userRecipe.title = $('#recipeTitle').val()
+  userRecipe.directions = $('#recipeDirections').val()
+  console.log(userRecipe)
+  let userName = $('#display-name').attr('data-value')
+  db.collection('user-recipes').add({
+    recipe: userRecipe,
+    addedBy: userName,
+    addedByID: auth.currentUser.uid
+  })
+  // Reset
+  $('#recipe-form').trigger('reset') // Reset every form field
+  $('#ingredients').empty() // Remove all the appended ingredient list items
+  $('#addFamilyRecipe').modal('hide') // Hide the add recipe modal
+  // Reset the userRecipe object
+  userRecipe.title = ''
+  userRecipe.ingredients = []
+  userRecipe.directions = ''
+})
+
+// Show user recipes
+$(document).on('click', '#get-user-recipes', () => {
+  getUserRecipes()
+})
+
+let getUserRecipes = () => {
+  $('.recipeResults').empty()
+  db.collection('user-recipes').get()
+    .then((snap) => {
+      snap.docs.forEach((doc) => {
+        displayUserRecipes(doc.data(), doc.id)
+      })
+    })
+}
+
+// Generate html for user recipes
+let displayUserRecipes = (data, id) => {
+  let recipe = data.recipe
+  let num = Math.floor(100000 + Math.random() * 900000)
+  let recipeHTML = `
+    <div class="row">
+      <div class="col-12">
+        <div class="card mt-3">
+          <div class="card-header">
+            <h5 class="d-inline lead"><b>${recipe.title}</b></h5>
+            <div class="d-inline ml-2">
+              <small class="text-muted">Created by <b>${data.addedBy}</b></small>
+            </div>`
+  // Add a delete button if the user created this recipe
+  let userID = auth.currentUser.uid
+  if (data.addedByID === userID) {
+    recipeHTML += `
+            <span data-id="${id}" class="delete" data-toggle="tooltip" data-placement="top" title="Delete Recipe">
+              <button class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </span>`
+  }
+  recipeHTML += ` 
+        </div>
+          <div class="card-body">
+            <h5 class="card-title">Ingredients <button class="btn btn-success" id="whisk${num}" 
+            data-toggle="tooltip" data-placement="top" title="Add all ingredients to shopping cart">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            </h5>`
+  recipeHTML += generateIngredientList(recipe.ingredients)
+  recipeHTML += `
+            <h5 class="card-title">Directions</h5>
+            <p class="card-text">${recipe.directions}</p>
+          </div>
+        </div>
+      </div>
+    </div>`
+  whisk.queue.push(function () {
+    $(document).on('click', `#whisk${num}`, (e) => {
+      e.preventDefault()
+      whisk.shoppingList.addProductsToBasket({
+        products: recipe.ingredients
+      })
+    })
+  })
+  $('.recipeResults').append(recipeHTML)
+  // Get bootstrap tooltips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+}
+
+// Create ingredient list out of the array of ingredients from firebase
+let generateIngredientList = (ingredients) => {
+  let ingredientsList = '<ul class="row">'
+  for (let i = 0; i < ingredients.length; i++) {
+    ingredientsList += `<li class="col-6">${ingredients[i]}</li>`
+  }
+  ingredientsList += '</ul>'
+  return ingredientsList
+}
+
+// Delete User recipe
+let deleteID
+$(document).on('click', '.delete', function () {
+  deleteID = $(this).attr('data-id')
+  $('#modal-delete').modal('show')
+})
+
+// Confirm and delete
+$('#confirm-delete').on('click', () => {
+  db.collection('user-recipes').doc(deleteID)
+    .delete()
+    .then(() => {
+      console.log('Recipe deleted succesfully')
+      $('#modal-delete').modal('hide') // Hide the modal
+      getUserRecipes() // Show all the user recipes again minus the deleted one
+    }).catch((error) => {
+      console.error(`Error deleting recipe ${error}`)
+    })
+})
+
+// Cancel deletion
+$('#cancel-delete').on('click', () => {
+  $('#modal-delete').modal('hide') // Hide the modal
+})
 
 //
 // USER AUTH
@@ -250,26 +420,29 @@ logout.on('click', (e) => {
 // Hide and show html elements based on whether user is logged in or out
 const userLoggedOut = document.querySelectorAll('.logged-out')
 const userLoggedIn = document.querySelectorAll('.logged-in')
+const userWelcome = $('#welcome-user')
 const setupUI = (user) => {
   // if logged in
   if (user) {
     db.collection('users').doc(user.uid).get().then(doc => {
+      userWelcome.html(`Welcome, <span id="display-name" data-value="${doc.data().displayName}">${doc.data().displayName}</span>`)
       // Show account info
-      $('#display-name').attr('data-value', doc.data().displayName)
-      $('#user-display-name').text(doc.data().displayName)
-      $('#user-email').text(user.email)
-      $('#user-account-created').text(user.metadata.creationTime)
+      // $('#display-name').attr('data-value', doc.data().displayName)
+      // $('#user-display-name').text(doc.data().displayName)
+      // $('#user-email').text(user.email)
+      // $('#user-account-created').text(user.metadata.creationTime)
     })
     // Show UI elements
     userLoggedIn.forEach((item) => { item.style.display = 'block' })
     userLoggedOut.forEach((item) => { item.style.display = 'none' })
   // if logged out
   } else {
+    userWelcome.text(`Welcome`)
     // Hide account details
-    $('#display-name').attr('data-value', '')
-    $('#user-display-name').text('')
-    $('#user-email').text('')
-    $('#user-account-created').text('')
+    // $('#display-name').attr('data-value', '')
+    // $('#user-display-name').text('')
+    // $('#user-email').text('')
+    // $('#user-account-created').text('')
     // Hide UI elements
     userLoggedIn.forEach((item) => { item.style.display = 'none' })
     userLoggedOut.forEach((item) => { item.style.display = 'block' })
