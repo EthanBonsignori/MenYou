@@ -1,7 +1,7 @@
 # MenYou
 
 ![Image of MenYou](assets/images/MenYou-image.png)
-https://ethanbonsignori.github.io/Project-1/
+https://ethanbonsignori.github.io/MenYou/
 
 MenYou is a recipe database that allows users to search recipes and add ingredients to a shopping cart. Our goal is to allow users to meal plan and shop a location all within a few clicks.
 
